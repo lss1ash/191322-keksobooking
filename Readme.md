@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Александр Ярёха](https://up.htmlacademy.ru/javascript/9/user/191322).
-* Наставник: `Неизвестно`.
+* Наставник: [Семен Целищев](https://htmlacademy.ru/profile/id396229).
 
 ---
 
