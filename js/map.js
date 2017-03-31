@@ -4,6 +4,8 @@
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
   var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+  var PIN_WIDTH = 56;
+  var PIN_HEIGHT = 75;
 
   var offerTitles = [
     'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
@@ -66,5 +68,15 @@
 
   function getAvatar(i) {
     return 'img/avatars/user0' + avatarsReordered[i] + '.png';
+  }
+
+  function createOfferDiv(offer) {
+    var newDiv = document.createElement('div');
+    newDiv.className = 'pin';
+    newDiv.innerHTML = '<img src=\"' + offer.author.avatar + '\">';
+    newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
+    newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
+
+    return newDiv;
   }
 }());
