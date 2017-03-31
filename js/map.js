@@ -11,20 +11,46 @@
   ];
 
   // Создаём массив и случайным образом перемешиваем элементы
-  var avatarsRandomlyOrdered = Array.apply(null, {length: 8}).map(function (cur, i) {
-    return i;
-  }).forEach(function (num, i, arr) {
-    var random = getRandomNumber(1, 8);
+  var avatarsReordered = createArray(8).map(function (cur, i) {
+    return i + 1;
+  });
+
+  avatarsReordered.forEach(reorderArray);
+  offerTitles.forEach(reorderArray);
+
+  var ads = createArray(8).map(function (cur, i) {
+    return {
+      'author': {
+        'avatar': getAvatar(i)
+      },
+      'offer': {
+        'title': offerTitles[i]
+      }
+    };
+  });
+
+  function createArray(len) {
+    return Array.apply(null, {length: len});
+  }
+
+  function reorderArray(num, i, arr) {
+    var random = getRandomNumber(0, arr.length - 1);
     var saved = arr[random];
     arr[random] = num;
     arr[i] = saved;
-  });
+  }
 
   function getRandomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
   }
 
+  // function getRandomItem(items) {
+  //   removeItem = removeItem || false;
+  //   var index = getRandomNumber(0, items.length - 1);
+  //   return items[];
+  // }
+
   function getAvatar(i) {
-    return 'img/avatars/user0' + avatarsRandomlyOrdered[i] + '.png';
+    return 'img/avatars/user0' + avatarsReordered[i] + '.png';
   }
 }());
