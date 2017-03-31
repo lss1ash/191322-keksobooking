@@ -47,6 +47,13 @@
     };
   });
 
+  var pinsFragment = document.createDocumentFragment();
+  for (var i = 0; i < offers.length; i++) {
+    pinsFragment.appendChild(createOfferDiv(offers[i]));
+  }
+  var pinMap = document.querySelector('.tokyo__pin-map');
+  pinMap.appendChild(pinsFragment);
+
   function createArray(len) {
     return Array.apply(null, {length: len});
   }
