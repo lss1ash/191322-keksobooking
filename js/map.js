@@ -18,13 +18,29 @@
   avatarsReordered.forEach(reorderArray);
   offerTitles.forEach(reorderArray);
 
-  var ads = createArray(8).map(function (cur, i) {
+  var offers = createArray(8).map(function (cur, i) {
     return {
       'author': {
         'avatar': getAvatar(i)
       },
       'offer': {
-        'title': offerTitles[i]
+        'title': offerTitles[i],
+        'address': 'WHT?',
+        'price': getRandomNumber(1000, 1000000),
+        'type': getRandomItem(OFFER_TYPES),
+        'rooms': getRandomNumber(1, 5),
+        'guests': getRandomNumber(0, 50), // не указаны рамки в задании, сколько написать?
+        'checkin': getRandomItem(OFFER_CHECKS),
+        'checkout': getRandomItem(OFFER_CHECKS),
+        'features': createArray(getRandomNumber(0, 6)).map(function () {
+          return getRandomItem(OFFER_FEATURES);
+        }),
+        'description': '',
+        'photos': []
+      },
+      'location': {
+        'x': getRandomNumber(300, 900),
+        'y': getRandomNumber(100, 500)
       }
     };
   });
@@ -44,11 +60,9 @@
     return Math.round(Math.random() * (max - min) + min);
   }
 
-  // function getRandomItem(items) {
-  //   removeItem = removeItem || false;
-  //   var index = getRandomNumber(0, items.length - 1);
-  //   return items[];
-  // }
+  function getRandomItem(items) {
+    return items[getRandomNumber(0, items.length - 1)];
+  }
 
   function getAvatar(i) {
     return 'img/avatars/user0' + avatarsReordered[i] + '.png';
