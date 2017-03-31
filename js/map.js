@@ -23,4 +23,8 @@
   function getRandomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
   }
+
+  function getAvatar(i) {
+    return 'img/avatars/user0' + avatarsRandomlyOrdered[i] + '.png';
+  }
 }());
