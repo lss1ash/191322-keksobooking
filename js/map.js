@@ -58,11 +58,11 @@
     return Array.apply(null, {length: len});
   }
 
-  function reorderArray(num, i, arr) {
+  function reorderArray(num, ind, arr) {
     var random = getRandomNumber(0, arr.length - 1);
     var saved = arr[random];
     arr[random] = num;
-    arr[i] = saved;
+    arr[ind] = saved;
   }
 
   function getRandomNumber(min, max) {
@@ -73,8 +73,8 @@
     return items[getRandomNumber(0, items.length - 1)];
   }
 
-  function getAvatar(i) {
-    return 'img/avatars/user0' + avatarsReordered[i] + '.png';
+  function getAvatar(ind) {
+    return 'img/avatars/user0' + avatarsReordered[ind] + '.png';
   }
 
   function createOfferDiv(offer) {
