@@ -7,7 +7,18 @@
 
   var offerTitles = [
     'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
-    'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+    'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
+  ];
+
+  // Создаём массив и случайным образом перемешиваем элементы
+  var avatarsRandomlyOrdered = Array.apply(null, {length: 8}).map(function (cur, i) {
+    return i;
+  }).forEach(function (num, i, arr) {
+    var random = getRandomNumber(1, 8);
+    var saved = arr[random];
+    arr[random] = num;
+    arr[i] = saved;
+  });
 
   function getRandomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
