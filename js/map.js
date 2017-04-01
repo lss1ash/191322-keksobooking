@@ -66,13 +66,17 @@
 
   function fillOffersArray() {
     return createArray(8).map(function (cur, ind) {
-      var item = {
+      var loc = {
+        'x': getRandomNumber(300, 900),
+        'y': getRandomNumber(100, 500)
+      };
+      return {
         'author': {
           'avatar': getAvatar(ind)
         },
         'offer': {
           'title': offerTitles[ind],
-          'address': '',
+          'address': loc.x + ', ' + loc.y,
           'price': getRandomNumber(1000, 1000000),
           'type': getRandomItem(OFFER_TYPES),
           'rooms': getRandomNumber(1, 5),
@@ -85,13 +89,8 @@
           'description': '',
           'photos': []
         },
-        'location': {
-          'x': getRandomNumber(300, 900),
-          'y': getRandomNumber(100, 500)
-        }
+        'location': loc
       };
-      item.offer.address = item.location.x + ', ' + item.location.y;
-      return item;
     });
   }
 
