@@ -9,7 +9,7 @@
   };
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
   var PIN_WIDTH = 56;
-  // var PIN_HEIGHT = 75;
+  var PIN_HEIGHT = 75;
 
   var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var offerTitles = [
@@ -21,14 +21,14 @@
     return i + 1;
   });
 
-  avatarsReordered.forEach(reorderArray);
-  offerTitles.forEach(reorderArray);
+  shuffle(avatarsReordered);
+  shuffle(offerTitles);
 
   var offers = fillOffersArray();
 
   appendPinsToMap();
 
-  fillDialogTemplate(offers[0].offer);
+  fillDialogTemplate(offers[0]);
 
   function createArray(len) {
     return Array.apply(null, {length: len});
@@ -39,6 +39,10 @@
     var saved = arr[random];
     arr[random] = num;
     arr[ind] = saved;
+  }
+
+  function shuffle(array) {
+    array.forEach(reorderArray);
   }
 
   function getRandomNumber(min, max) {
@@ -56,16 +60,18 @@
   function createOfferDiv(offer) {
     var newDiv = document.createElement('div');
     newDiv.className = 'pin';
-    newDiv.innerHTML = '<img src=\"' + offer.author.avatar + '\">';
+    var newImage = new Image(40, 40);
+    newImage.classList.add('rounded');
+    newImage.setAttribute('src', offer.author.avatar);
+    newDiv.appendChild(newImage);
     newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
-    // newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px'; // Слишком высоко при таком сдвиге...
-    newDiv.style.top = (offer.location.y) + 'px';
+    newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
 
     return newDiv;
   }
 
   function fillOffersArray() {
-    offerFeatures.forEach(reorderArray);
+    shuffle(offerFeatures);
     return createArray(8).map(function (cur, ind) {
       var loc = {
         'x': getRandomNumber(300, 900),
@@ -104,26 +110,33 @@
     pinMap.appendChild(pinsFragment);
   }
 
-  function fillDialogTemplate(offer) {
+  function setText(root, selector, text) {
+    root.querySelector(selector).textContent = text;
+  }
+
+  function fillDialogTemplate(item) {
     var lodgeClone = document.getElementById('lodge-template').content.cloneNode(true);
-    lodgeClone.querySelector('.lodge__title').textContent = offer.title;
-    lodgeClone.querySelector('.lodge__address').textContent = offer.address;
-    lodgeClone.querySelector('.lodge__price').innerHTML = offer.price + '&#x20bd;/ночь';
-    lodgeClone.querySelector('.lodge__type').textContent = OFFER_TYPE_DESCRIPTIONS[offer.type];
-    lodgeClone.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + offer.guests + ' гостей в ' + offer.rooms + ' комнатах';
-    lodgeClone.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
+    setText(lodgeClone, '.lodge__title', item.offer.title);
+    setText(lodgeClone, '.lodge__address', item.offer.address);
+    lodgeClone.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
+    setText(lodgeClone, '.lodge__type', OFFER_TYPE_DESCRIPTIONS[item.offer.type]);
+    setText(lodgeClone, '.lodge__rooms-and-guests', 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах');
+    setText(lodgeClone, '.lodge__checkin-time', 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout);
+
     var lodgeCloneFeatures = lodgeClone.querySelector('.lodge__features');
-    offer.features.forEach(function (feature) {
+    item.offer.features.forEach(function (feature) {
       var newSpan = document.createElement('span');
-      newSpan.classList.add('feature__image');
-      newSpan.classList.add('feature__image--' + feature);
+      newSpan.classList.add('feature__image', 'feature__image--' + feature);
       lodgeCloneFeatures.appendChild(newSpan);
     });
-    lodgeClone.querySelector('.lodge__description').textContent = offer.description;
+    setText(lodgeClone, '.lodge__description', item.offer.description);
 
     var offerDialog = document.getElementById('offer-dialog');
     var currentDialog = offerDialog.querySelector('.dialog__panel');
 
     offerDialog.replaceChild(lodgeClone, currentDialog);
+
+    var offerAvatar = offerDialog.querySelector('.dialog__title').querySelector('img');
+    offerAvatar.setAttribute('src', item.author.avatar);
   }
 }());
