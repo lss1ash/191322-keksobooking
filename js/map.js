@@ -8,10 +8,10 @@
     bungalo: 'Бунгало'
   };
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
-  var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var PIN_WIDTH = 56;
   // var PIN_HEIGHT = 75;
 
+  var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var offerTitles = [
     'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
     'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
@@ -65,6 +65,7 @@
   }
 
   function fillOffersArray() {
+    offerFeatures.forEach(reorderArray);
     return createArray(8).map(function (cur, ind) {
       var loc = {
         'x': getRandomNumber(300, 900),
@@ -83,8 +84,8 @@
           'guests': getRandomNumber(0, 50),
           'checkin': getRandomItem(OFFER_CHECKS),
           'checkout': getRandomItem(OFFER_CHECKS),
-          'features': createArray(getRandomNumber(0, 6)).map(function () {
-            return getRandomItem(OFFER_FEATURES);
+          'features': createArray(getRandomNumber(0, offerFeatures.length)).map(function (curItem, i) {
+            return offerFeatures[i];
           }),
           'description': '',
           'photos': []
