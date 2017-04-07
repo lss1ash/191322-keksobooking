@@ -36,7 +36,7 @@
   function activatePin(event) {
     var element = event.target;
     var pin = element.className.indexOf('pin') >= 0;
-    var rounded = element.className.indexOf('rounded') >= 0
+    var rounded = element.tagName === 'IMG' && element.className.indexOf('rounded') >= 0;
     if (pin || rounded) {
       console.log('catched!');
     }
