@@ -17,6 +17,8 @@
     'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
   ];
 
+  var pinMap = document.querySelector('.tokyo__pin-map');
+
   var avatarsReordered = createArray(8).map(function (cur, i) {
     return i + 1;
   });
@@ -106,7 +108,6 @@
     for (var i = 0; i < offers.length; i++) {
       pinsFragment.appendChild(createOfferDiv(offers[i]));
     }
-    var pinMap = document.querySelector('.tokyo__pin-map');
     pinMap.appendChild(pinsFragment);
   }
 
