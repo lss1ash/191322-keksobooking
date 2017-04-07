@@ -18,6 +18,7 @@
   ];
 
   var pinMap = document.querySelector('.tokyo__pin-map');
+  pinMap.addEventListener('click', activatePin);
 
   var avatarsReordered = createArray(8).map(function (cur, i) {
     return i + 1;
@@ -31,6 +32,15 @@
   appendPinsToMap();
 
   fillDialogTemplate(offers[0]);
+
+  function activatePin(event) {
+    var element = event.target;
+    var pin = element.className.indexOf('pin') >= 0;
+    var rounded = element.className.indexOf('rounded') >= 0
+    if (pin || rounded) {
+      console.log('catched!');
+    }
+  }
 
   function createArray(len) {
     return Array.apply(null, {length: len});
