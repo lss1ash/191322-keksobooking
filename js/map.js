@@ -39,18 +39,38 @@
   pins.forEach(function (pin) {
     pin.addEventListener('click', pinClickHandler);
   });
+  var dialogClose = offerDialog.querySelector('.dialog__close');
+  dialogClose.addEventListener('click', closeDlgHandler);
+
+  function closeDlg() {
+    var activePin = getActivePin();
+    if (activePin) {
+      activePin.classList.remove('pin--active');
+    }
+    offerDialog.style.display = 'none';
+  }
 
   function pinClickHandler(e) {
     activatePin(e.currentTarget);
+    dialogClose.addEventListener('click', closeDlgHandler);
+  }
+
+  function closeDlgHandler(e) {
+    closeDlg();
+    dialogClose.removeEventListener('click', closeDlgHandler);
   }
 
   function activatePin(pin) {
-    var activePin = pinMap.querySelector('.pin--active');
+    var activePin = getActivePin();
     if (activePin) {
       activePin.classList.remove('pin--active');
     }
     pin.classList.add('pin--active');
     offerDialog.style.display = 'block';
+  }
+
+  function getActivePin() {
+    return pinMap.querySelector('.pin--active');
   }
 
   function createArray(len) {
