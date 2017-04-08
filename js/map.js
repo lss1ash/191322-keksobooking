@@ -42,6 +42,7 @@
   });
   var dialogClose = offerDialog.querySelector('.dialog__close');
   dialogClose.addEventListener('click', closeDlgHandler);
+  document.addEventListener('keydown', closeDlgKeyDownHandler);
 
   function pinClickHandler(e) {
     activatePin(e.currentTarget);
@@ -56,11 +57,20 @@
   function closeDlg() {
     deactivatePin();
     offerDialog.style.display = 'none';
+    dialogClose.removeEventListener('click', closeDlgHandler);
+    document.removeEventListener('keydown', closeDlgKeyDownHandler);
   }
 
   function closeDlgHandler(e) {
+    e.preventDefault();
     closeDlg();
-    dialogClose.removeEventListener('click', closeDlgHandler);
+  }
+
+  function closeDlgKeyDownHandler(e) {
+    if (e.keyCode === 27) {
+      e.preventDefault();
+      closeDlg();
+    }
   }
 
   function activatePin(pin) {
@@ -104,12 +114,14 @@
     return 'img/avatars/user0' + avatarsReordered[ind] + '.png';
   }
 
-  function createOfferDiv(offer) {
+  function createOfferDiv(offer, indx) {
     var newDiv = document.createElement('div');
     newDiv.className = 'pin';
     var newImage = new Image(40, 40);
     newImage.classList.add('rounded');
     newImage.setAttribute('src', offer.author.avatar);
+    newDiv.setAttribute('tabindex', 0);
+    newDiv.setAttribute('data-index', indx);
     newDiv.appendChild(newImage);
     newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
     newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
@@ -151,7 +163,7 @@
   function appendPinsToMap() {
     var pinsFragment = document.createDocumentFragment();
     for (var i = 0; i < offers.length; i++) {
-      pinsFragment.appendChild(createOfferDiv(offers[i]));
+      pinsFragment.appendChild(createOfferDiv(offers[i], i));
     }
     pinMap.appendChild(pinsFragment);
   }
