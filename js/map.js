@@ -18,11 +18,13 @@
   ];
 
   var pinMap = document.querySelector('.tokyo__pin-map');
-  pinMap.addEventListener('click', activatePin);
 
   var avatarsReordered = createArray(8).map(function (cur, i) {
     return i + 1;
   });
+
+  var offerDialog = document.getElementById('offer-dialog');
+  var currentDialog = offerDialog.querySelector('.dialog__panel');
 
   shuffle(avatarsReordered);
   shuffle(offerTitles);
@@ -33,13 +35,22 @@
 
   fillDialogTemplate(offers[0]);
 
-  function activatePin(event) {
-    var element = event.target;
-    var pin = element.className.indexOf('pin') >= 0;
-    var rounded = element.tagName === 'IMG' && element.className.indexOf('rounded') >= 0;
-    if (pin || rounded) {
-      console.log('catched!');
+  var pins = pinMap.querySelectorAll('.pin');
+  pins.forEach(function (pin) {
+    pin.addEventListener('click', pinClickHandler);
+  });
+
+  function pinClickHandler(e) {
+    activatePin(e.currentTarget);
+  }
+
+  function activatePin(pin) {
+    var activePin = pinMap.querySelector('.pin--active');
+    if (activePin) {
+      activePin.classList.remove('pin--active');
     }
+    pin.classList.add('pin--active');
+    offerDialog.style.display = 'block';
   }
 
   function createArray(len) {
@@ -141,9 +152,6 @@
       lodgeCloneFeatures.appendChild(newSpan);
     });
     setText(lodgeClone, '.lodge__description', item.offer.description);
-
-    var offerDialog = document.getElementById('offer-dialog');
-    var currentDialog = offerDialog.querySelector('.dialog__panel');
 
     offerDialog.replaceChild(lodgeClone, currentDialog);
 
