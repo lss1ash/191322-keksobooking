@@ -38,21 +38,24 @@
   var pins = pinMap.querySelectorAll('.pin');
   pins.forEach(function (pin) {
     pin.addEventListener('click', pinClickHandler);
+    pin.addEventListener('keydown', pinKeyDownHandler);
   });
   var dialogClose = offerDialog.querySelector('.dialog__close');
   dialogClose.addEventListener('click', closeDlgHandler);
 
-  function closeDlg() {
-    var activePin = getActivePin();
-    if (activePin) {
-      activePin.classList.remove('pin--active');
-    }
-    offerDialog.style.display = 'none';
-  }
-
   function pinClickHandler(e) {
     activatePin(e.currentTarget);
-    dialogClose.addEventListener('click', closeDlgHandler);
+  }
+
+  function pinKeyDownHandler(e) {
+    if (e.keyCode === 13) {
+      activatePin(e.currentTarget);
+    }
+  }
+
+  function closeDlg() {
+    deactivatePin();
+    offerDialog.style.display = 'none';
   }
 
   function closeDlgHandler(e) {
@@ -61,16 +64,17 @@
   }
 
   function activatePin(pin) {
-    var activePin = getActivePin();
+    deactivatePin();
+    pin.classList.add('pin--active');
+    offerDialog.style.display = 'block';
+    dialogClose.addEventListener('click', closeDlgHandler);
+  }
+
+  function deactivatePin() {
+    var activePin = pinMap.querySelector('.pin--active');
     if (activePin) {
       activePin.classList.remove('pin--active');
     }
-    pin.classList.add('pin--active');
-    offerDialog.style.display = 'block';
-  }
-
-  function getActivePin() {
-    return pinMap.querySelector('.pin--active');
   }
 
   function createArray(len) {
