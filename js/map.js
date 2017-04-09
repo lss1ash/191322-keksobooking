@@ -44,6 +44,18 @@
   dialogClose.addEventListener('click', closeDlgHandler);
   document.addEventListener('keydown', closeDlgKeyDownHandler);
 
+  // Module4-task2
+  var noticeForm = document.querySelector('.notice__form');
+  var selectTimeIn = noticeForm.querySelector('#time');
+  var selectTimeOut = noticeForm.querySelector('#timeout');
+  selectTimeIn.addEventListener('change', selectSameTimeHandler);
+  selectTimeOut.addEventListener('change', selectSameTimeHandler);
+
+  function selectSameTimeHandler(e) {
+    var itemToChange = e.currentTarget === selectTimeIn ? selectTimeOut : selectTimeIn;
+    itemToChange.children[e.target.selectedIndex].selected = true;
+  }
+
   function pinClickHandler(e) {
     activatePin(e.currentTarget);
   }
