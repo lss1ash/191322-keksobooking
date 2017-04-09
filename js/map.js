@@ -76,8 +76,10 @@
   function activatePin(pin) {
     deactivatePin();
     pin.classList.add('pin--active');
+    fillDialogTemplate(offers[pin.getAttribute('data-index')]);
     offerDialog.style.display = 'block';
     dialogClose.addEventListener('click', closeDlgHandler);
+    document.addEventListener('keydown', closeDlgKeyDownHandler);
   }
 
   function deactivatePin() {
@@ -193,5 +195,6 @@
 
     var offerAvatar = offerDialog.querySelector('.dialog__title').querySelector('img');
     offerAvatar.setAttribute('src', item.author.avatar);
+    currentDialog = offerDialog.querySelector('.dialog__panel');
   }
 }());
