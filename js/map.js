@@ -76,7 +76,10 @@
   function activatePin(pin) {
     deactivatePin();
     pin.classList.add('pin--active');
-    fillDialogTemplate(offers[pin.getAttribute('data-index')]);
+    var pinIndex = pin.getAttribute('data-index');
+    if (pinIndex) {
+      fillDialogTemplate(offers[pinIndex]);
+    }
     offerDialog.style.display = 'block';
     dialogClose.addEventListener('click', closeDlgHandler);
     document.addEventListener('keydown', closeDlgKeyDownHandler);
