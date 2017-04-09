@@ -36,7 +36,7 @@
   fillDialogTemplate(offers[0]);
 
   var pins = pinMap.querySelectorAll('.pin');
-  pins.forEach(function (pin) {
+  [].slice.call(pins).forEach(function (pin) {
     pin.addEventListener('click', pinClickHandler);
     pin.addEventListener('keydown', pinKeyDownHandler);
   });
@@ -76,9 +76,8 @@
   function activatePin(pin) {
     deactivatePin();
     pin.classList.add('pin--active');
-    var pinIndex = pin.getAttribute('data-index');
-    if (pinIndex) {
-      fillDialogTemplate(offers[pinIndex]);
+    if (pin.dataset.index) {
+      fillDialogTemplate(offers[pin.dataset.index]);
     }
     offerDialog.style.display = 'block';
     dialogClose.addEventListener('click', closeDlgHandler);
@@ -119,14 +118,14 @@
     return 'img/avatars/user0' + avatarsReordered[ind] + '.png';
   }
 
-  function createOfferDiv(offer, indx) {
+  function createOfferDiv(offer, index) {
     var newDiv = document.createElement('div');
     newDiv.className = 'pin';
     var newImage = new Image(40, 40);
     newImage.classList.add('rounded');
     newImage.setAttribute('src', offer.author.avatar);
     newDiv.setAttribute('tabindex', 0);
-    newDiv.setAttribute('data-index', indx);
+    newDiv.setAttribute('data-index', index);
     newDiv.appendChild(newImage);
     newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
     newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
@@ -167,9 +166,9 @@
 
   function appendPinsToMap() {
     var pinsFragment = document.createDocumentFragment();
-    for (var i = 0; i < offers.length; i++) {
-      pinsFragment.appendChild(createOfferDiv(offers[i], i));
-    }
+    offers.forEach(function (offer, index) {
+      pinsFragment.appendChild(createOfferDiv(offer, index));
+    });
     pinMap.appendChild(pinsFragment);
   }
 
