@@ -46,14 +46,49 @@
 
   // Module4-task2
   var noticeForm = document.querySelector('.notice__form');
+  // Время въезда-выезда синхронизируем
   var selectTimeIn = noticeForm.querySelector('#time');
   var selectTimeOut = noticeForm.querySelector('#timeout');
   selectTimeIn.addEventListener('change', selectSameTimeHandler);
   selectTimeOut.addEventListener('change', selectSameTimeHandler);
+  // Тип жилья синхронизируем
+  var selectBuildingType = noticeForm.querySelector('#type');
+  var inputOfferPrice = noticeForm.querySelector('#price');
+  selectBuildingType.addEventListener('change', selectBuildingHandler);
+  inputOfferPrice.addEventListener('change', inputOfferPriceHandler);
+  // Количество комнат синхронизируем
+  var selectRoomNum = noticeForm.querySelector('#room_number');
+  var selectCapacity = noticeForm.querySelector('#capacity');
+  selectRoomNum.addEventListener('change', selectRoomNumHandler);
+  selectCapacity.addEventListener('change', selectCapacityHandler);
+
+  function inputOfferPriceHandler() {
+    
+  }
+
+  function selectRoomNumHandler(e) {
+    var capacityValue = 1;
+    switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
+      case '1': capacityValue = 0; break;
+      case '2':
+      case '100': capacityValue = 3; break;
+    }
+    selectCapacity.value = capacityValue;
+  }
+
+  function selectBuildingHandler(e) {
+    var minPrice = 1000;
+    switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
+      case 'flat': minPrice = 1000; break;
+      case 'bungalo': minPrice = 0; break;
+      case 'house': minPrice = 10000; break;
+    }
+    inputOfferPrice.setAttribute('min', minPrice);
+  }
 
   function selectSameTimeHandler(e) {
     var itemToChange = e.currentTarget === selectTimeIn ? selectTimeOut : selectTimeIn;
-    itemToChange.children[e.target.selectedIndex].selected = true;
+    itemToChange.children[e.currentTarget.selectedIndex].selected = true;
   }
 
   function pinClickHandler(e) {
