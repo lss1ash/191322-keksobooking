@@ -7,6 +7,11 @@
     house: 'Дом',
     bungalo: 'Бунгало'
   };
+  var OFFER_TYPE_MINCOST = {
+    flat: 1000,
+    house: 10000,
+    bungalo: 0
+  };
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
@@ -55,15 +60,29 @@
   var selectBuildingType = noticeForm.querySelector('#type');
   var inputOfferPrice = noticeForm.querySelector('#price');
   selectBuildingType.addEventListener('change', selectBuildingHandler);
-  inputOfferPrice.addEventListener('change', inputOfferPriceHandler);
+  inputOfferPrice.addEventListener('input', inputOfferPriceHandler);
   // Количество комнат синхронизируем
   var selectRoomNum = noticeForm.querySelector('#room_number');
   var selectCapacity = noticeForm.querySelector('#capacity');
   selectRoomNum.addEventListener('change', selectRoomNumHandler);
   selectCapacity.addEventListener('change', selectCapacityHandler);
 
-  function inputOfferPriceHandler() {
-    
+  function selectCapacityHandler() {
+    if (selectCapacity.value === '0') {
+      selectRoomNum.value = 1;
+    } else if (selectCapacity.value === '3') {
+      selectRoomNum.value = 2;
+    }
+  }
+
+  function inputOfferPriceHandler(e) {
+    var buildingType = 'flat';
+    if (inputOfferPrice.value < OFFER_TYPE_MINCOST['flat']) {
+      buildingType = 'bungalo';
+    } else if (inputOfferPrice.value >= OFFER_TYPE_MINCOST['house']) {
+      buildingType = 'house';
+    }
+    selectBuildingType.value = buildingType;
   }
 
   function selectRoomNumHandler(e) {
@@ -77,13 +96,12 @@
   }
 
   function selectBuildingHandler(e) {
-    var minPrice = 1000;
-    switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
-      case 'flat': minPrice = 1000; break;
-      case 'bungalo': minPrice = 0; break;
-      case 'house': minPrice = 10000; break;
-    }
+    var minPrice = OFFER_TYPE_MINCOST[e.currentTarget.children[e.currentTarget.selectedIndex].value];
+    minPrice = minPrice || OFFER_TYPE_MINCOST['flat'];
     inputOfferPrice.setAttribute('min', minPrice);
+    if (inputOfferPrice.value === '' || +inputOfferPrice.value < minPrice) {
+      inputOfferPrice.value = minPrice;
+    }
   }
 
   function selectSameTimeHandler(e) {
