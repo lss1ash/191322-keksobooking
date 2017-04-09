@@ -16,6 +16,8 @@
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
 
+  var KEYCODE_ENTER = 13;
+
   var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var offerTitles = [
     'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
@@ -51,6 +53,10 @@
 
   // Module4-task2
   var noticeForm = document.querySelector('.notice__form');
+  noticeForm.addEventListener('submit', noticeFormSubmitHandler);
+  var submitButton = noticeForm.querySelector('.form__submit');
+  submitButton.addEventListener('click', submitClickHandler);
+  submitButton.addEventListener('keydown', submitKeydownHandler);
   // Время въезда-выезда синхронизируем
   var selectTimeIn = noticeForm.querySelector('#time');
   var selectTimeOut = noticeForm.querySelector('#timeout');
@@ -67,6 +73,37 @@
   selectRoomNum.addEventListener('change', selectRoomNumHandler);
   selectCapacity.addEventListener('change', selectCapacityHandler);
 
+  function validateForm() {
+    var result = true;
+    [].forEach.call(noticeForm, function (item) {
+      if (!item.validity.valid) {
+        item.classList.add('field__invalid');
+        result = false;
+      } else {
+        item.classList.remove('field__invalid');
+      }
+    });
+    return result;
+  }
+
+  function noticeFormSubmitHandler(e) {
+    noticeForm.reset();
+  }
+
+  function submitClickHandler(e) {
+    if (!validateForm()) {
+      e.preventDefault();
+    }
+  }
+
+  function submitKeydownHandler(e) {
+    if (e.keyCode === KEYCODE_ENTER) {
+      if (!validateForm()) {
+        e.preventDefault();
+      }
+    }
+  }
+
   function selectCapacityHandler() {
     if (selectCapacity.value === '0') {
       selectRoomNum.value = 1;
@@ -76,13 +113,17 @@
   }
 
   function inputOfferPriceHandler(e) {
+    var newChange = new Event('change');
     var buildingType = 'flat';
     if (inputOfferPrice.value < OFFER_TYPE_MINCOST['flat']) {
       buildingType = 'bungalo';
     } else if (inputOfferPrice.value >= OFFER_TYPE_MINCOST['house']) {
       buildingType = 'house';
     }
-    selectBuildingType.value = buildingType;
+    if (selectBuildingType.value !== buildingType) {
+      selectBuildingType.value = buildingType;
+      selectBuildingType.dispatchEvent(newChange);
+    }
   }
 
   function selectRoomNumHandler(e) {
@@ -97,7 +138,6 @@
 
   function selectBuildingHandler(e) {
     var minPrice = OFFER_TYPE_MINCOST[e.currentTarget.children[e.currentTarget.selectedIndex].value];
-    minPrice = minPrice || OFFER_TYPE_MINCOST['flat'];
     inputOfferPrice.setAttribute('min', minPrice);
     if (inputOfferPrice.value === '' || +inputOfferPrice.value < minPrice) {
       inputOfferPrice.value = minPrice;
