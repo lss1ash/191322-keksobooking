@@ -30,11 +30,11 @@
     return Array.apply(null, {length: len});
   }
 
-  function reorderItem(num, ind, arr) {
-    var random = getRandomNumber(0, arr.length - 1);
-    var saved = arr[random];
-    arr[random] = num;
-    arr[ind] = saved;
+  function reorderItem(number, index, array) {
+    var random = getRandomNumber(0, array.length - 1);
+    var saved = array[random];
+    array[random] = number;
+    array[index] = saved;
   }
 
   function shuffle(array) {
@@ -138,7 +138,7 @@
 
       offerDialog.replaceChild(lodgeClone, currentDialog);
 
-      var offerAvatar = offerDialog.querySelector('.dialog__title').querySelector('img');
+      var offerAvatar = offerDialog.querySelector('.dialog__title').children[0];
       offerAvatar.setAttribute('src', item.author.avatar);
       currentDialog = offerDialog.querySelector('.dialog__panel');
     },
@@ -187,8 +187,8 @@
       newDiv.dataset.index = index;
       newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
       newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
-      var newImage = new Image(40, 40);
 
+      var newImage = new Image(40, 40);
       newImage.classList.add('rounded');
       newImage.setAttribute('src', offer.author.avatar);
       newDiv.appendChild(newImage);
@@ -236,6 +236,7 @@
     },
     submitFormHandler: function (e) {
       noticeForm.reset();
+      e.preventDefault();
     },
     submitClickHandler: function (e) {
       if (!form.validate()) {
@@ -269,11 +270,12 @@
       }
     },
     selectRoomNumHandler: function (e) {
-      var capacityValue = 1;
+      var capacityValue;
       switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
         case '1': capacityValue = 0; break;
         case '2':
         case '100': capacityValue = 3; break;
+        default: capacityValue = 1;
       }
       selectCapacity.value = capacityValue;
     },
@@ -285,7 +287,7 @@
       }
     },
     selectSameTimeHandler: function (e) {
-      var itemToChange = e.currentTarget === selectTimeIn ? selectTimeOut : selectTimeIn;
+      var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
       itemToChange.children[e.currentTarget.selectedIndex].selected = true;
     },
     addEventListeners: function () {
