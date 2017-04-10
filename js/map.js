@@ -146,7 +146,7 @@
 
   // Объект пина
   var pin = {
-    active: '',
+    active: null,
     activate: function (pinItem) {
       if (pinItem.dataset.index && pin.active !== pinItem) {
         pin.deactivate();
@@ -157,9 +157,9 @@
       }
     },
     deactivate: function () {
-      if (pin.active !== '') {
+      if (pin.active !== null) {
         pin.active.classList.remove('pin--active');
-        pin.active = '';
+        pin.active = null;
       }
     },
     create: function (offer, index) {
