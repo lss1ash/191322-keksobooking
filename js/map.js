@@ -164,7 +164,7 @@
 
   // Объект пина
   var pin = {
-    active: '',
+    active: null,
     activate: function (pinItem) {
       if (pinItem.dataset.index && pin.active !== pinItem) {
         pin.deactivate();
@@ -175,22 +175,24 @@
       }
     },
     deactivate: function () {
-      if (pin.active !== '') {
+      if (pin.active !== null) {
         pin.active.classList.remove('pin--active');
-        pin.active = '';
+        pin.active = null;
       }
     },
     create: function (offer, index) {
       var newDiv = document.createElement('div');
       newDiv.className = 'pin';
-      var newImage = new Image(40, 40);
-      newImage.classList.add('rounded');
-      newImage.setAttribute('src', offer.author.avatar);
       newDiv.setAttribute('tabindex', 0);
       newDiv.dataset.index = index;
-      newDiv.appendChild(newImage);
       newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
       newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
+      var newImage = new Image(40, 40);
+
+      newImage.classList.add('rounded');
+      newImage.setAttribute('src', offer.author.avatar);
+      newDiv.appendChild(newImage);
+
       return newDiv;
     },
     addEventListeners: function () {
