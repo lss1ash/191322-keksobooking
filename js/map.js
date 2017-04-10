@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  // Константы
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
   var OFFER_TYPE_DESCRIPTIONS = {
     flat: 'Квартира',
@@ -17,85 +18,12 @@
     'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
   ];
 
-  var pinMap = document.querySelector('.tokyo__pin-map');
-
-  var avatarsReordered = createArray(8).map(function (cur, i) {
-    return i + 1;
-  });
-
-  var offerDialog = document.getElementById('offer-dialog');
-  var currentDialog = offerDialog.querySelector('.dialog__panel');
-
-  shuffle(avatarsReordered);
-  shuffle(offerTitles);
-
-  var offers = fillOffersArray();
-
-  appendPinsToMap();
-
-  fillDialogTemplate(offers[0]);
-
-  var pins = pinMap.querySelectorAll('.pin');
-  [].slice.call(pins).forEach(function (pin) {
-    pin.addEventListener('click', pinClickHandler);
-    pin.addEventListener('keydown', pinKeyDownHandler);
-  });
-  var dialogClose = offerDialog.querySelector('.dialog__close');
-  dialogClose.addEventListener('click', closeDlgHandler);
-  document.addEventListener('keydown', closeDlgKeyDownHandler);
-
-  function pinClickHandler(e) {
-    activatePin(e.currentTarget);
-  }
-
-  function pinKeyDownHandler(e) {
-    if (e.keyCode === 13) {
-      activatePin(e.currentTarget);
-    }
-  }
-
-  function closeDlg() {
-    deactivatePin();
-    offerDialog.style.display = 'none';
-    dialogClose.removeEventListener('click', closeDlgHandler);
-    document.removeEventListener('keydown', closeDlgKeyDownHandler);
-  }
-
-  function closeDlgHandler(e) {
-    e.preventDefault();
-    closeDlg();
-  }
-
-  function closeDlgKeyDownHandler(e) {
-    if (e.keyCode === 27) {
-      e.preventDefault();
-      closeDlg();
-    }
-  }
-
-  function activatePin(pin) {
-    deactivatePin();
-    pin.classList.add('pin--active');
-    if (pin.dataset.index) {
-      fillDialogTemplate(offers[pin.dataset.index]);
-    }
-    offerDialog.style.display = 'block';
-    dialogClose.addEventListener('click', closeDlgHandler);
-    document.addEventListener('keydown', closeDlgKeyDownHandler);
-  }
-
-  function deactivatePin() {
-    var activePin = pinMap.querySelector('.pin--active');
-    if (activePin) {
-      activePin.classList.remove('pin--active');
-    }
-  }
-
+  // Вспомогательные функции
   function createArray(len) {
     return Array.apply(null, {length: len});
   }
 
-  function reorderArray(num, ind, arr) {
+  function reorderItem(num, ind, arr) {
     var random = getRandomNumber(0, arr.length - 1);
     var saved = arr[random];
     arr[random] = num;
@@ -103,7 +31,7 @@
   }
 
   function shuffle(array) {
-    array.forEach(reorderArray);
+    array.forEach(reorderItem);
   }
 
   function getRandomNumber(min, max) {
@@ -112,25 +40,6 @@
 
   function getRandomItem(items) {
     return items[getRandomNumber(0, items.length - 1)];
-  }
-
-  function getAvatar(ind) {
-    return 'img/avatars/user0' + avatarsReordered[ind] + '.png';
-  }
-
-  function createOfferDiv(offer, index) {
-    var newDiv = document.createElement('div');
-    newDiv.className = 'pin';
-    var newImage = new Image(40, 40);
-    newImage.classList.add('rounded');
-    newImage.setAttribute('src', offer.author.avatar);
-    newDiv.setAttribute('tabindex', 0);
-    newDiv.setAttribute('data-index', index);
-    newDiv.appendChild(newImage);
-    newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
-    newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
-
-    return newDiv;
   }
 
   function fillOffersArray() {
@@ -142,7 +51,7 @@
       };
       return {
         'author': {
-          'avatar': getAvatar(ind)
+          'avatar': 'img/avatars/user0' + avatars[ind] + '.png'
         },
         'offer': {
           'title': offerTitles[ind],
@@ -164,39 +73,135 @@
     });
   }
 
-  function appendPinsToMap() {
-    var pinsFragment = document.createDocumentFragment();
-    offers.forEach(function (offer, index) {
-      pinsFragment.appendChild(createOfferDiv(offer, index));
-    });
-    pinMap.appendChild(pinsFragment);
-  }
+  // Заполним случайные данные
+  var avatars = createArray(8).map(function (cur, i) {
+    return i + 1;
+  });
+  shuffle(avatars);
+  shuffle(offerTitles);
 
-  function setText(root, selector, text) {
-    root.querySelector(selector).textContent = text;
-  }
+  var pinMap = document.querySelector('.tokyo__pin-map');
+  var offerDialog = document.getElementById('offer-dialog');
+  var currentDialog = offerDialog.querySelector('.dialog__panel');
+  var dialogClose = offerDialog.querySelector('.dialog__close');
 
-  function fillDialogTemplate(item) {
-    var lodgeClone = document.getElementById('lodge-template').content.cloneNode(true);
-    setText(lodgeClone, '.lodge__title', item.offer.title);
-    setText(lodgeClone, '.lodge__address', item.offer.address);
-    lodgeClone.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
-    setText(lodgeClone, '.lodge__type', OFFER_TYPE_DESCRIPTIONS[item.offer.type]);
-    setText(lodgeClone, '.lodge__rooms-and-guests', 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах');
-    setText(lodgeClone, '.lodge__checkin-time', 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout);
+  var offers = fillOffersArray();
 
-    var lodgeCloneFeatures = lodgeClone.querySelector('.lodge__features');
-    item.offer.features.forEach(function (feature) {
-      var newSpan = document.createElement('span');
-      newSpan.classList.add('feature__image', 'feature__image--' + feature);
-      lodgeCloneFeatures.appendChild(newSpan);
-    });
-    setText(lodgeClone, '.lodge__description', item.offer.description);
+  // Объект диалога с описанием предложения
+  var offerDescriptionDialog = {
+    open: function () {
+      offerDialog.style.display = 'block';
+      offerDescriptionDialog.addEventListeners();
+    },
+    close: function () {
+      pin.deactivate();
+      offerDialog.style.display = 'none';
+      offerDescriptionDialog.removeEventListeners();
+    },
+    fill: function (item) {
+      var setText = function (root, selector, text) {
+        root.querySelector(selector).textContent = text;
+      };
+      var lodgeClone = document.getElementById('lodge-template').content.cloneNode(true);
+      setText(lodgeClone, '.lodge__title', item.offer.title);
+      setText(lodgeClone, '.lodge__address', item.offer.address);
+      lodgeClone.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
+      setText(lodgeClone, '.lodge__type', OFFER_TYPE_DESCRIPTIONS[item.offer.type]);
+      setText(lodgeClone, '.lodge__rooms-and-guests', 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах');
+      setText(lodgeClone, '.lodge__checkin-time', 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout);
 
-    offerDialog.replaceChild(lodgeClone, currentDialog);
+      var lodgeCloneFeatures = lodgeClone.querySelector('.lodge__features');
+      item.offer.features.forEach(function (feature) {
+        var newSpan = document.createElement('span');
+        newSpan.classList.add('feature__image', 'feature__image--' + feature);
+        lodgeCloneFeatures.appendChild(newSpan);
+      });
+      setText(lodgeClone, '.lodge__description', item.offer.description);
 
-    var offerAvatar = offerDialog.querySelector('.dialog__title').querySelector('img');
-    offerAvatar.setAttribute('src', item.author.avatar);
-    currentDialog = offerDialog.querySelector('.dialog__panel');
-  }
+      offerDialog.replaceChild(lodgeClone, currentDialog);
+
+      var offerAvatar = offerDialog.querySelector('.dialog__title').querySelector('img');
+      offerAvatar.setAttribute('src', item.author.avatar);
+      currentDialog = offerDialog.querySelector('.dialog__panel');
+    },
+    addEventListeners: function () {
+      dialogClose.addEventListener('click', this.closeClickHandler);
+      document.addEventListener('keydown', this.closeKeyDownHandler);
+    },
+    removeEventListeners: function () {
+      dialogClose.removeEventListener('click', this.closeClickHandler);
+      document.removeEventListener('keydown', this.closeKeyDownHandler);
+    },
+    closeClickHandler: function (e) {
+      e.preventDefault();
+      offerDescriptionDialog.close();
+    },
+    closeKeyDownHandler: function (e) {
+      if (e.keyCode === 27) {
+        e.preventDefault();
+        offerDescriptionDialog.close();
+      }
+    }
+  };
+
+  // Объект пина
+  var pin = {
+    active: '',
+    activate: function (pinItem) {
+      if (pinItem.dataset.index && pin.active !== pinItem) {
+        pin.deactivate();
+        pinItem.classList.add('pin--active');
+        offerDescriptionDialog.fill(offers[pinItem.dataset.index]);
+        pin.active = pinItem;
+        offerDescriptionDialog.open();
+      }
+    },
+    deactivate: function () {
+      if (pin.active !== '') {
+        pin.active.classList.remove('pin--active');
+        pin.active = '';
+      }
+    },
+    create: function (offer, index) {
+      var newDiv = document.createElement('div');
+      newDiv.className = 'pin';
+      var newImage = new Image(40, 40);
+      newImage.classList.add('rounded');
+      newImage.setAttribute('src', offer.author.avatar);
+      newDiv.setAttribute('tabindex', 0);
+      newDiv.dataset.index = index;
+      newDiv.appendChild(newImage);
+      newDiv.style.left = (offer.location.x - PIN_WIDTH / 2) + 'px';
+      newDiv.style.top = (offer.location.y - PIN_HEIGHT) + 'px';
+      return newDiv;
+    },
+    addEventListeners: function () {
+      var pins = pinMap.querySelectorAll('.pin');
+      [].slice.call(pins).forEach(function (pinItem) {
+        pinItem.addEventListener('click', pin.clickHandler);
+        pinItem.addEventListener('keydown', pin.keyDownHandler);
+      });
+    },
+    clickHandler: function (e) {
+      pin.activate(e.currentTarget);
+    },
+    keyDownHandler: function (e) {
+      if (e.keyCode === 13) {
+        pin.activate(e.currentTarget);
+      }
+    },
+    appendToMap: function () {
+      var pinsFragment = document.createDocumentFragment();
+      offers.forEach(function (offer, index) {
+        pinsFragment.appendChild(pin.create(offer, index));
+      });
+      pinMap.appendChild(pinsFragment);
+      pin.addEventListeners();
+    }
+  };
+
+  pin.appendToMap();
+  pin.addEventListeners();
+  offerDescriptionDialog.fill(offers[0]);
+  offerDescriptionDialog.addEventListeners();
 }());
