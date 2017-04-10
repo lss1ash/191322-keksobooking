@@ -655,3 +655,8 @@ select option:hover {
 .rounded {
     border-radius: 50%;
 }
+
+.field--invalid {
+  border-color: #ffaa99;
+  box-shadow: 0 0 4px 1px #ff6547;
+}
