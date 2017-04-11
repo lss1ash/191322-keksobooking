@@ -266,7 +266,7 @@
       }
       if (selectBuildingType.value !== buildingType) {
         selectBuildingType.value = buildingType;
-        selectBuildingType.dispatchEvent(new Event('change'));
+        inputOfferPrice.setAttribute('min', OFFER_TYPE_MINCOST[buildingType]);
       }
     },
     selectRoomNumHandler: function (e) {
@@ -280,11 +280,9 @@
       selectCapacity.value = capacityValue;
     },
     selectBuildingHandler: function (e) {
-      var minPrice = OFFER_TYPE_MINCOST[e.currentTarget.children[e.currentTarget.selectedIndex].value];
+      var minPrice = OFFER_TYPE_MINCOST[selectBuildingType.children[selectBuildingType.selectedIndex].value];
       inputOfferPrice.setAttribute('min', minPrice);
-      if (inputOfferPrice.value === '' || +inputOfferPrice.value < minPrice) {
-        inputOfferPrice.value = minPrice;
-      }
+      inputOfferPrice.value = minPrice;
     },
     selectSameTimeHandler: function (e) {
       var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
