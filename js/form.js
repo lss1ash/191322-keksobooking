@@ -18,6 +18,7 @@
   var inputOfferPrice = noticeForm.querySelector('#price');
   var selectRoomNum = noticeForm.querySelector('#room_number');
   var selectCapacity = noticeForm.querySelector('#capacity');
+  var inputAddress = noticeForm.querySelector('#address');
 
   // Объект формы
   var form = {
@@ -87,6 +88,9 @@
       var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
       itemToChange.children[e.currentTarget.selectedIndex].selected = true;
     },
+    inputAddressHandler: function (e) {
+      window.pin.setMainPinCoords(inputAddress.value);
+    },
     addEventListeners: function () {
       noticeForm.addEventListener('submit', form.submitFormHandler);
       submitButton.addEventListener('click', form.submitClickHandler);
@@ -97,8 +101,15 @@
       inputOfferPrice.addEventListener('input', form.inputOfferPriceHandler);
       selectRoomNum.addEventListener('change', form.selectRoomNumHandler);
       selectCapacity.addEventListener('change', form.selectCapacityHandler);
+      inputAddress.addEventListener('change', form.inputAddressHandler);
     }
   };
 
+  var setAddress = function (coords) {
+    inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
+  };
+
   form.addEventListeners();
+
+  window.setMainPinAddress = setAddress;
 }());
