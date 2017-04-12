@@ -1,13 +1,9 @@
 'use strict';
 
 (function () {
+
   // Константы
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
-  var OFFER_TYPE_DESCRIPTIONS = {
-    flat: 'Квартира',
-    house: 'Дом',
-    bungalo: 'Бунгало'
-  };
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
@@ -82,85 +78,25 @@
 
   // pinMap
   var pinMap = document.querySelector('.tokyo__pin-map');
-  var offerDialog = document.getElementById('offer-dialog');
-  var currentDialog = offerDialog.querySelector('.dialog__panel');
-  var dialogClose = offerDialog.querySelector('.dialog__close');
 
   var offers = fillOffersArray();
 
-  // Объект диалога с описанием предложения
-  var offerDescriptionDialog = {
-    open: function () {
-      offerDialog.style.display = 'block';
-      offerDescriptionDialog.addEventListeners();
-    },
-    close: function () {
-      pin.deactivate();
-      offerDialog.style.display = 'none';
-      offerDescriptionDialog.removeEventListeners();
-    },
-    fill: function (item) {
-      var setText = function (root, selector, text) {
-        root.querySelector(selector).textContent = text;
-      };
-      var lodgeClone = document.getElementById('lodge-template').content.cloneNode(true);
-      setText(lodgeClone, '.lodge__title', item.offer.title);
-      setText(lodgeClone, '.lodge__address', item.offer.address);
-      lodgeClone.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
-      setText(lodgeClone, '.lodge__type', OFFER_TYPE_DESCRIPTIONS[item.offer.type]);
-      setText(lodgeClone, '.lodge__rooms-and-guests', 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах');
-      setText(lodgeClone, '.lodge__checkin-time', 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout);
-
-      var lodgeCloneFeatures = lodgeClone.querySelector('.lodge__features');
-      item.offer.features.forEach(function (feature) {
-        var newSpan = document.createElement('span');
-        newSpan.classList.add('feature__image', 'feature__image--' + feature);
-        lodgeCloneFeatures.appendChild(newSpan);
-      });
-      setText(lodgeClone, '.lodge__description', item.offer.description);
-
-      offerDialog.replaceChild(lodgeClone, currentDialog);
-
-      var offerAvatar = offerDialog.querySelector('.dialog__title').children[0];
-      offerAvatar.setAttribute('src', item.author.avatar);
-      currentDialog = offerDialog.querySelector('.dialog__panel');
-    },
-    addEventListeners: function () {
-      dialogClose.addEventListener('click', this.closeClickHandler);
-      document.addEventListener('keydown', this.closeKeyDownHandler);
-    },
-    removeEventListeners: function () {
-      dialogClose.removeEventListener('click', this.closeClickHandler);
-      document.removeEventListener('keydown', this.closeKeyDownHandler);
-    },
-    closeClickHandler: function (e) {
-      e.preventDefault();
-      offerDescriptionDialog.close();
-    },
-    closeKeyDownHandler: function (e) {
-      if (e.keyCode === 27) {
-        e.preventDefault();
-        offerDescriptionDialog.close();
-      }
-    }
-  };
-
   // Объект пина
-  var pin = {
+  window.pin = {
     active: null,
     activate: function (pinItem) {
-      if (pinItem.dataset.index && pin.active !== pinItem) {
-        pin.deactivate();
+      if (pinItem.dataset.index && window.pin.active !== pinItem) {
+        window.pin.deactivate();
         pinItem.classList.add('pin--active');
-        offerDescriptionDialog.fill(offers[pinItem.dataset.index]);
-        pin.active = pinItem;
-        offerDescriptionDialog.open();
+        window.offerDescriptionDialog.fill(offers[pinItem.dataset.index]);
+        window.pin.active = pinItem;
+        window.offerDescriptionDialog.open();
       }
     },
     deactivate: function () {
-      if (pin.active !== null) {
-        pin.active.classList.remove('pin--active');
-        pin.active = null;
+      if (window.pin.active !== null) {
+        window.pin.active.classList.remove('pin--active');
+        window.pin.active = null;
       }
     },
     create: function (offer, index) {
@@ -181,31 +117,30 @@
     addEventListeners: function () {
       var pins = pinMap.querySelectorAll('.pin');
       [].slice.call(pins).forEach(function (pinItem) {
-        pinItem.addEventListener('click', pin.clickHandler);
-        pinItem.addEventListener('keydown', pin.keyDownHandler);
+        pinItem.addEventListener('click', window.pin.clickHandler);
+        pinItem.addEventListener('keydown', window.pin.keyDownHandler);
       });
     },
     clickHandler: function (e) {
-      pin.activate(e.currentTarget);
+      window.pin.activate(e.currentTarget);
     },
     keyDownHandler: function (e) {
       if (e.keyCode === 13) {
-        pin.activate(e.currentTarget);
+        window.pin.activate(e.currentTarget);
       }
     },
     appendToMap: function () {
       var pinsFragment = document.createDocumentFragment();
       offers.forEach(function (offer, index) {
-        pinsFragment.appendChild(pin.create(offer, index));
+        pinsFragment.appendChild(window.pin.create(offer, index));
       });
       pinMap.appendChild(pinsFragment);
-      pin.addEventListeners();
+      window.pin.addEventListeners();
     }
   };
 
-  pin.appendToMap();
-  pin.addEventListeners();
-  offerDescriptionDialog.fill(offers[0]);
-  offerDescriptionDialog.addEventListeners();
-
+  window.pin.appendToMap();
+  window.pin.addEventListeners();
+  window.offerDescriptionDialog.fill(offers[0]);
+  window.offerDescriptionDialog.addEventListeners();
 }());
