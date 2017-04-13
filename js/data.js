@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (app) {
 
   // Константы
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
@@ -11,6 +11,7 @@
     'Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец',
     'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'
   ];
+  var avatars = [];
 
   // Вспомогательные функции
   function createArray(len) {
@@ -67,12 +68,18 @@
     });
   }
 
-  // Заполним случайные данные
-  var avatars = createArray(8).map(function (cur, i) {
-    return i + 1;
-  });
-  shuffle(avatars);
-  shuffle(offerTitles);
+  var data = {
+    get: function () {
+      avatars = createArray(8).map(function (cur, i) {
+        return i + 1;
+      });
+      shuffle(avatars);
+      shuffle(offerTitles);
+      data.offers = fillOffersArray();
+    },
+    offers: []
+  };
 
-  window.offers = fillOffersArray();
-}());
+  app.data = data;
+
+}(window.app));

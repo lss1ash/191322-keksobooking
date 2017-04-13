@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (app) {
 
   var OFFER_TYPE_MINCOST = {
     flat: 1000,
@@ -89,9 +89,12 @@
       itemToChange.children[e.currentTarget.selectedIndex].selected = true;
     },
     inputAddressHandler: function (e) {
-      window.pin.setMainPinCoords(inputAddress.value);
-    },
-    addEventListeners: function () {
+      app.pin.setMainPinCoords(inputAddress.value);
+    }
+  };
+
+  var formPublic = {
+    init: function () {
       noticeForm.addEventListener('submit', form.submitFormHandler);
       submitButton.addEventListener('click', form.submitClickHandler);
       submitButton.addEventListener('keydown', form.submitKeydownHandler);
@@ -101,15 +104,15 @@
       inputOfferPrice.addEventListener('input', form.inputOfferPriceHandler);
       selectRoomNum.addEventListener('change', form.selectRoomNumHandler);
       selectCapacity.addEventListener('change', form.selectCapacityHandler);
-      inputAddress.addEventListener('change', form.inputAddressHandler);
+      inputAddress.addEventListener('input', form.inputAddressHandler);
+    },
+    setAddress: function (coords) {
+      inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
     }
   };
 
-  var setAddress = function (coords) {
-    inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
-  };
+  // window.setMainPinAddress = setAddress;
 
-  form.addEventListeners();
+  app.form = formPublic;
 
-  window.setMainPinAddress = setAddress;
-}());
+}(window.app));

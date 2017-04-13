@@ -1,6 +1,10 @@
 'use strict';
 
-(function () {
+(function (app) {
+
+  var card = app.card;
+  var data = app.data;
+  var form = app.form;
 
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
@@ -10,21 +14,15 @@
   var pinMap = document.querySelector('.tokyo__pin-map');
   var mainPin = pinMap.querySelector('.pin__main');
 
-  window.pin = {
+  var pin = {
     active: null,
     activate: function (pinItem) {
-      if (pinItem.dataset.index && window.pin.active !== pinItem) {
-        window.pin.deactivate();
+      if (pinItem.dataset.index && pin.active !== pinItem) {
+        pinPublic.deactivate();
         pinItem.classList.add('pin--active');
-        window.offerDescriptionDialog.fill(window.offers[pinItem.dataset.index]);
-        window.pin.active = pinItem;
-        window.offerDescriptionDialog.open();
-      }
-    },
-    deactivate: function () {
-      if (window.pin.active !== null) {
-        window.pin.active.classList.remove('pin--active');
-        window.pin.active = null;
+        card.fill(data.offers[pinItem.dataset.index]);
+        pin.active = pinItem;
+        card.open();
       }
     },
     create: function (offer, index) {
@@ -45,17 +43,17 @@
     addEventListeners: function () {
       var pins = pinMap.querySelectorAll('.pin');
       [].slice.call(pins).forEach(function (pinItem) {
-        pinItem.addEventListener('click', window.pin.clickHandler);
-        pinItem.addEventListener('keydown', window.pin.keyDownHandler);
-        mainPin.addEventListener('mousedown', window.pin.clickMainPinHandler);
+        pinItem.addEventListener('click', pin.clickHandler);
+        pinItem.addEventListener('keydown', pin.keyDownHandler);
+        mainPin.addEventListener('mousedown', pin.clickMainPinHandler);
       });
     },
     clickHandler: function (e) {
-      window.pin.activate(e.currentTarget);
+      pin.activate(e.currentTarget);
     },
     keyDownHandler: function (e) {
       if (e.keyCode === 13) {
-        window.pin.activate(e.currentTarget);
+        pin.activate(e.currentTarget);
       }
     },
     clickMainPinHandler: function (e) {
@@ -94,11 +92,32 @@
           y: mainPin.offsetTop + PIN_MAIN_HEIGHT
         };
 
-        window.setMainPinAddress(resultCoords);
+        form.setAddress(resultCoords);
       };
 
       document.addEventListener('mousemove', mouseMoveHandler);
       document.addEventListener('mouseup', mouseUpHandler);
+    },
+    appendToMap: function () {
+      var pinsFragment = document.createDocumentFragment();
+      data.offers.forEach(function (offer, index) {
+        pinsFragment.appendChild(pin.create(offer, index));
+      });
+      pinMap.appendChild(pinsFragment);
+      pin.addEventListeners();
+    }
+  };
+
+  var pinPublic = {
+    init: function () {
+      pin.appendToMap();
+      pin.addEventListeners();
+    },
+    deactivate: function () {
+      if (pin.active !== null) {
+        pin.active.classList.remove('pin--active');
+        pin.active = null;
+      }
     },
     setMainPinCoords: function (coordsStr) {
       var coords = coordsStr.split('').filter(function (letter) {
@@ -108,15 +127,9 @@
       var y = +coords[1].substring(2) - PIN_MAIN_HEIGHT;
       mainPin.style.left = x + 'px';
       mainPin.style.top = y + 'px';
-    },
-    appendToMap: function () {
-      var pinsFragment = document.createDocumentFragment();
-      window.offers.forEach(function (offer, index) {
-        pinsFragment.appendChild(window.pin.create(offer, index));
-      });
-      pinMap.appendChild(pinsFragment);
-      window.pin.addEventListeners();
     }
   };
 
-}());
+  app.pin = pinPublic;
+
+}(window.app));

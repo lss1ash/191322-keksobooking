@@ -1,10 +1,10 @@
 'use strict';
 
-(function () {
+(function (app) {
 
-  window.pin.appendToMap();
-  window.pin.addEventListeners();
-  window.offerDescriptionDialog.fill(window.offers[0]);
-  window.offerDescriptionDialog.addEventListeners();
+  app.data.get();
+  app.card.init();
+  app.pin.init();
+  app.form.init();
 
-}());
+}(window.app));
