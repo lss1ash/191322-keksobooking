@@ -1,6 +1,6 @@
 'use strict';
 
-(function () {
+(function (app) {
 
   var OFFER_TYPE_MINCOST = {
     flat: 1000,
@@ -100,5 +100,7 @@
     }
   };
 
-  form.addEventListeners();
-}());
+  app.form = {
+    init: form.addEventListeners
+  };
+}(window.app));

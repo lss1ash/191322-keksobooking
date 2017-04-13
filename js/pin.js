@@ -1,27 +1,27 @@
 'use strict';
 
-(function () {
+(function (app) {
 
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
 
   var pinMap = document.querySelector('.tokyo__pin-map');
 
-  window.pin = {
+  var pin = {
     active: null,
     activate: function (pinItem) {
-      if (pinItem.dataset.index && window.pin.active !== pinItem) {
-        window.pin.deactivate();
+      if (pinItem.dataset.index && pin.active !== pinItem) {
+        pin.deactivate();
         pinItem.classList.add('pin--active');
-        window.offerDescriptionDialog.fill(window.offers[pinItem.dataset.index]);
-        window.pin.active = pinItem;
-        window.offerDescriptionDialog.open();
+        app.card.fill(app.offers[pinItem.dataset.index]);
+        pin.active = pinItem;
+        app.card.open();
       }
     },
     deactivate: function () {
-      if (window.pin.active !== null) {
-        window.pin.active.classList.remove('pin--active');
-        window.pin.active = null;
+      if (pin.active !== null) {
+        pin.active.classList.remove('pin--active');
+        pin.active = null;
       }
     },
     create: function (offer, index) {
@@ -42,26 +42,32 @@
     addEventListeners: function () {
       var pins = pinMap.querySelectorAll('.pin');
       [].slice.call(pins).forEach(function (pinItem) {
-        pinItem.addEventListener('click', window.pin.clickHandler);
-        pinItem.addEventListener('keydown', window.pin.keyDownHandler);
+        pinItem.addEventListener('click', pin.clickHandler);
+        pinItem.addEventListener('keydown', pin.keyDownHandler);
       });
     },
     clickHandler: function (e) {
-      window.pin.activate(e.currentTarget);
+      pin.activate(e.currentTarget);
     },
     keyDownHandler: function (e) {
       if (e.keyCode === 13) {
-        window.pin.activate(e.currentTarget);
+        pin.activate(e.currentTarget);
       }
     },
     appendToMap: function () {
       var pinsFragment = document.createDocumentFragment();
-      window.offers.forEach(function (offer, index) {
-        pinsFragment.appendChild(window.pin.create(offer, index));
+      app.offers.forEach(function (offer, index) {
+        pinsFragment.appendChild(pin.create(offer, index));
       });
       pinMap.appendChild(pinsFragment);
-      window.pin.addEventListeners();
+      pin.addEventListeners();
     }
   };
 
-}());
+  app.pin = pin;
+  app.pin.init = function () {
+    app.pin.appendToMap();
+    app.pin.addEventListeners();
+  };
+
+}(window.app));
