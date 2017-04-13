@@ -2,6 +2,9 @@
 
 (function (app) {
 
+  var card = app.card;
+  var data = app.data;
+
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
 
@@ -11,17 +14,11 @@
     active: null,
     activate: function (pinItem) {
       if (pinItem.dataset.index && pin.active !== pinItem) {
-        pin.deactivate();
+        pinPublic.deactivate();
         pinItem.classList.add('pin--active');
-        app.card.fill(app.offers[pinItem.dataset.index]);
+        card.fill(data.offers[pinItem.dataset.index]);
         pin.active = pinItem;
-        app.card.open();
-      }
-    },
-    deactivate: function () {
-      if (pin.active !== null) {
-        pin.active.classList.remove('pin--active');
-        pin.active = null;
+        card.open();
       }
     },
     create: function (offer, index) {
@@ -56,7 +53,7 @@
     },
     appendToMap: function () {
       var pinsFragment = document.createDocumentFragment();
-      app.offers.forEach(function (offer, index) {
+      data.offers.forEach(function (offer, index) {
         pinsFragment.appendChild(pin.create(offer, index));
       });
       pinMap.appendChild(pinsFragment);
@@ -64,10 +61,19 @@
     }
   };
 
-  app.pin = pin;
-  app.pin.init = function () {
-    app.pin.appendToMap();
-    app.pin.addEventListeners();
+  var pinPublic = {
+    init: function () {
+      pin.appendToMap();
+      pin.addEventListeners();
+    },
+    deactivate: function () {
+      if (pin.active !== null) {
+        pin.active.classList.remove('pin--active');
+        pin.active = null;
+      }
+    }
   };
+
+  app.pin = pinPublic;
 
 }(window.app));

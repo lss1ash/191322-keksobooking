@@ -3,8 +3,8 @@
 (function (app) {
 
   app.data.get();
-  app.pin.init();
   app.card.init();
+  app.pin.init();
   app.form.init();
 
 }(window.app));

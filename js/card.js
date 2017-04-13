@@ -2,6 +2,10 @@
 
 (function (app) {
 
+  // var pin = app.pin;
+  // card смотрит на app.pin, однако app.pin еще не существует (и наоборот - pin )
+  var data = app.data;
+
   var OFFER_TYPE_DESCRIPTIONS = {
     flat: 'Квартира',
     house: 'Дом',
@@ -24,33 +28,11 @@
 
   // Объект диалога с описанием предложения
   var offerDescriptionDialog = {
-    open: function () {
-      offerDialog.style.display = 'block';
-      offerDescriptionDialog.addEventListeners();
-    },
     close: function () {
       app.pin.deactivate();
       offerDialog.style.display = 'none';
       offerDescriptionDialog.removeEventListeners();
     },
-    fill: function (item) {
-      var lodgeClone = lodgeTemplate.content.cloneNode(true);
-      var cloneRoot = lodgeClone.children[0]; // dialog__panel
-      cloneRoot.children[0].textContent = item.offer.title;
-      cloneRoot.children[1].textContent = item.offer.address;
-      cloneRoot.children[2].innerHTML = item.offer.price + '&#x20bd;/ночь';
-      cloneRoot.children[3].textContent = OFFER_TYPE_DESCRIPTIONS[item.offer.type];
-      cloneRoot.children[4].textContent = 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах';
-      cloneRoot.children[5].textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-      fillFeatures(cloneRoot.children[6], item.offer.features);
-      cloneRoot.children[7].textContent = item.offer.description;
-
-      offerAvatar.setAttribute('src', item.author.avatar);
-      offerDialog.replaceChild(lodgeClone, currentDialog);
-
-      currentDialog = offerDialog.querySelector('.dialog__panel');
-    },
-
     addEventListeners: function () {
       dialogClose.addEventListener('click', this.closeClickHandler);
       document.addEventListener('keydown', this.closeKeyDownHandler);
@@ -71,9 +53,34 @@
     }
   };
 
-  app.card = offerDescriptionDialog;
-  app.card.init = function () {
-    app.card.fill(app.offers[0]);
-    app.card.addEventListeners();
+  var offerDescriptionDialogPublic = {
+    open: function () {
+      offerDialog.style.display = 'block';
+      offerDescriptionDialog.addEventListeners();
+    },
+    fill: function (item) {
+      var lodgeClone = lodgeTemplate.content.cloneNode(true);
+      var cloneRoot = lodgeClone.children[0]; // dialog__panel
+      cloneRoot.children[0].textContent = item.offer.title;
+      cloneRoot.children[1].textContent = item.offer.address;
+      cloneRoot.children[2].innerHTML = item.offer.price + '&#x20bd;/ночь';
+      cloneRoot.children[3].textContent = OFFER_TYPE_DESCRIPTIONS[item.offer.type];
+      cloneRoot.children[4].textContent = 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах';
+      cloneRoot.children[5].textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+      fillFeatures(cloneRoot.children[6], item.offer.features);
+      cloneRoot.children[7].textContent = item.offer.description;
+
+      offerAvatar.setAttribute('src', item.author.avatar);
+      offerDialog.replaceChild(lodgeClone, currentDialog);
+
+      currentDialog = offerDialog.querySelector('.dialog__panel');
+    },
+    init: function () {
+      offerDescriptionDialogPublic.fill(data.offers[0]);
+      offerDescriptionDialog.addEventListeners();
+    }
   };
+
+  app.card = offerDescriptionDialogPublic;
+
 }(window.app));

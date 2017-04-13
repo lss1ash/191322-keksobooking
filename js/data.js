@@ -68,17 +68,18 @@
     });
   }
 
-  var init = function () {
-    avatars = createArray(8).map(function (cur, i) {
-      return i + 1;
-    });
-    shuffle(avatars);
-    shuffle(offerTitles);
-    app.offers = fillOffersArray();
+  var data = {
+    get: function () {
+      avatars = createArray(8).map(function (cur, i) {
+        return i + 1;
+      });
+      shuffle(avatars);
+      shuffle(offerTitles);
+      data.offers = fillOffersArray();
+    },
+    offers: []
   };
 
-  app.data = {
-    get: init
-  };
+  app.data = data;
 
 }(window.app));
