@@ -121,13 +121,16 @@
       }
     },
     setMainPinCoords: function (coordsStr) {
-      var coords = coordsStr.split('').filter(function (letter) {
-        return letter !== ' ';
-      }).join('').split(',');
-      var x = +coords[0].substring(2) - PIN_MAIN_WIDTH / 2;
-      var y = +coords[1].substring(2) - PIN_MAIN_HEIGHT;
-      mainPin.style.left = x + 'px';
-      mainPin.style.top = y + 'px';
+      var coords = coordsStr.replace(/\s/g, '').split(',');
+      var rightFormat = coords.length === 2 && coords[0].slice(0, 2).toLowerCase() === 'x:' && coords[1].slice(0, 2).toLowerCase() === 'y:';
+      if (rightFormat) {
+        var x = +coords[0].slice(2) - PIN_MAIN_WIDTH / 2;
+        var y = +coords[1].slice(2) - PIN_MAIN_HEIGHT;
+        if (typeof (x) === 'number' && typeof (y) === 'number') {
+          mainPin.style.left = x + 'px';
+          mainPin.style.top = y + 'px';
+        }
+      }
     }
   };
 
