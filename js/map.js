@@ -2,9 +2,19 @@
 
 (function (app) {
 
-  app.data.get();
-  app.card.init();
-  app.pin.init();
-  app.form.init();
+  app.factory = {
+    getData: function () {
+      return app.data;
+    },
+    getCard: function () {
+      return app.card;
+    },
+    getForm: function () {
+      return app.form;
+    },
+    getPin: function () {
+      return app.pin;
+    },
+  };
 
 }(window.app));

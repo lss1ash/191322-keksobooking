@@ -14,30 +14,30 @@
   var avatars = [];
 
   // Вспомогательные функции
-  function createArray(len) {
+  var createArray = function (len) {
     return Array.apply(null, {length: len});
-  }
+  };
 
-  function reorderItem(number, index, array) {
+  var reorderItem = function (number, index, array) {
     var random = getRandomNumber(0, array.length - 1);
     var saved = array[random];
     array[random] = number;
     array[index] = saved;
-  }
+  };
 
-  function shuffle(array) {
+  var shuffle = function (array) {
     array.forEach(reorderItem);
-  }
+  };
 
-  function getRandomNumber(min, max) {
+  var getRandomNumber = function (min, max) {
     return Math.round(Math.random() * (max - min) + min);
-  }
+  };
 
-  function getRandomItem(items) {
+  var getRandomItem = function (items) {
     return items[getRandomNumber(0, items.length - 1)];
-  }
+  };
 
-  function fillOffersArray() {
+  var fillOffersArray = function () {
     shuffle(offerFeatures);
     return createArray(8).map(function (cur, ind) {
       var loc = {
@@ -66,20 +66,19 @@
         'location': loc
       };
     });
-  }
-
-  var data = {
-    get: function () {
-      avatars = createArray(8).map(function (cur, i) {
-        return i + 1;
-      });
-      shuffle(avatars);
-      shuffle(offerTitles);
-      data.offers = fillOffersArray();
-    },
-    offers: []
   };
 
-  app.data = data;
+  var offersArray = (function () {
+    avatars = createArray(8).map(function (cur, i) {
+      return i + 1;
+    });
+    shuffle(avatars);
+    shuffle(offerTitles);
+    return fillOffersArray();
+  }());
+
+  app.data = {
+    offers: offersArray
+  };
 
 }(window.app));
