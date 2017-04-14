@@ -16,6 +16,10 @@
 
   var pin = {
     active: null,
+    startCoords: {
+      x: 0,
+      y: 0
+    },
     activate: function (pinItem) {
       if (pinItem.dataset.index && pin.active !== pinItem) {
         pinPublic.deactivate();
@@ -59,44 +63,41 @@
     clickMainPinHandler: function (e) {
       e.preventDefault();
 
-      var startCoords = {
+      pin.startCoords = {
+        x: e.clientX,
+        y: e.clientY
+      };
+      document.addEventListener('mousemove', pin.mouseMoveHandler);
+      document.addEventListener('mouseup', pin.mouseUpHandler);
+    },
+    mouseMoveHandler: function (e) {
+      e.preventDefault();
+
+      var shift = {
+        x: pin.startCoords.x - e.clientX,
+        y: pin.startCoords.y - e.clientY
+      };
+
+      pin.startCoords = {
         x: e.clientX,
         y: e.clientY
       };
 
-      var mouseMoveHandler = function (moveEvt) {
-        moveEvt.preventDefault();
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    },
+    mouseUpHandler: function (e) {
+      e.preventDefault();
 
-        var shift = {
-          x: startCoords.x - moveEvt.clientX,
-          y: startCoords.y - moveEvt.clientY
-        };
+      document.removeEventListener('mousemove', pin.mouseMoveHandler);
+      document.removeEventListener('mouseup', pin.mouseUpHandler);
 
-        startCoords = {
-          x: moveEvt.clientX,
-          y: moveEvt.clientY
-        };
-
-        mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
-        mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+      var resultCoords = {
+        x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
+        y: mainPin.offsetTop + PIN_MAIN_HEIGHT
       };
 
-      var mouseUpHandler = function (upEvt) {
-        upEvt.preventDefault();
-
-        document.removeEventListener('mousemove', mouseMoveHandler);
-        document.removeEventListener('mouseup', mouseUpHandler);
-
-        var resultCoords = {
-          x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
-          y: mainPin.offsetTop + PIN_MAIN_HEIGHT
-        };
-
-        form.setAddress(resultCoords);
-      };
-
-      document.addEventListener('mousemove', mouseMoveHandler);
-      document.addEventListener('mouseup', mouseUpHandler);
+      form.setAddress(resultCoords);
     },
     appendToMap: function () {
       var pinsFragment = document.createDocumentFragment();
