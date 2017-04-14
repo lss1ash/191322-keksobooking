@@ -4,14 +4,22 @@
 
   var card = app.card;
   var data = app.data;
+  var form = app.form;
 
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
+  var PIN_MAIN_WIDTH = 76;
+  var PIN_MAIN_HEIGHT = 94;
 
   var pinMap = document.querySelector('.tokyo__pin-map');
+  var mainPin = pinMap.querySelector('.pin__main');
 
   var pin = {
     active: null,
+    startCoords: {
+      x: 0,
+      y: 0
+    },
     activate: function (pinItem) {
       if (pinItem.dataset.index && pin.active !== pinItem) {
         pinPublic.deactivate();
@@ -42,6 +50,7 @@
         pinItem.addEventListener('click', pin.clickHandler);
         pinItem.addEventListener('keydown', pin.keyDownHandler);
       });
+      mainPin.addEventListener('mousedown', pin.clickMainPinHandler);
     },
     clickHandler: function (e) {
       pin.activate(e.currentTarget);
@@ -50,6 +59,45 @@
       if (e.keyCode === 13) {
         pin.activate(e.currentTarget);
       }
+    },
+    clickMainPinHandler: function (e) {
+      e.preventDefault();
+
+      pin.startCoords = {
+        x: e.clientX,
+        y: e.clientY
+      };
+      document.addEventListener('mousemove', pin.mouseMoveHandler);
+      document.addEventListener('mouseup', pin.mouseUpHandler);
+    },
+    mouseMoveHandler: function (e) {
+      e.preventDefault();
+
+      var shift = {
+        x: pin.startCoords.x - e.clientX,
+        y: pin.startCoords.y - e.clientY
+      };
+
+      pin.startCoords = {
+        x: e.clientX,
+        y: e.clientY
+      };
+
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    },
+    mouseUpHandler: function (e) {
+      e.preventDefault();
+
+      document.removeEventListener('mousemove', pin.mouseMoveHandler);
+      document.removeEventListener('mouseup', pin.mouseUpHandler);
+
+      var resultCoords = {
+        x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
+        y: mainPin.offsetTop + PIN_MAIN_HEIGHT
+      };
+
+      form.setAddress(resultCoords);
     },
     appendToMap: function () {
       var pinsFragment = document.createDocumentFragment();
@@ -65,11 +113,27 @@
     init: function () {
       pin.appendToMap();
       pin.addEventListeners();
+      form.setAddress({
+        x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
+        y: mainPin.offsetTop + PIN_MAIN_HEIGHT
+      });
     },
     deactivate: function () {
       if (pin.active !== null) {
         pin.active.classList.remove('pin--active');
         pin.active = null;
+      }
+    },
+    setMainPinCoords: function (coordsStr) {
+      var coords = coordsStr.replace(/\s/g, '').split(',');
+      var rightFormat = coords.length === 2 && coords[0].slice(0, 2).toLowerCase() === 'x:' && coords[1].slice(0, 2).toLowerCase() === 'y:';
+      if (rightFormat) {
+        var x = +coords[0].slice(2) - PIN_MAIN_WIDTH / 2;
+        var y = +coords[1].slice(2) - PIN_MAIN_HEIGHT;
+        if (typeof (x) === 'number' && typeof (y) === 'number') {
+          mainPin.style.left = x + 'px';
+          mainPin.style.top = y + 'px';
+        }
       }
     }
   };
