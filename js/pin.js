@@ -109,7 +109,7 @@
     }
   };
 
-    var pinPublic = {
+  var pinPublic = {
     init: function () {
       pin.appendToMap();
       pin.addEventListeners();
