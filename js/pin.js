@@ -45,8 +45,8 @@
       [].slice.call(pins).forEach(function (pinItem) {
         pinItem.addEventListener('click', pin.clickHandler);
         pinItem.addEventListener('keydown', pin.keyDownHandler);
-        mainPin.addEventListener('mousedown', pin.clickMainPinHandler);
       });
+      mainPin.addEventListener('mousedown', pin.clickMainPinHandler);
     },
     clickHandler: function (e) {
       pin.activate(e.currentTarget);
