@@ -88,7 +88,7 @@
       var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
       itemToChange.children[e.currentTarget.selectedIndex].selected = true;
     },
-    inputAddressHandler: function (e) {
+    inputAddressHandler: function () {
       app.pin.setMainPinCoords(inputAddress.value);
     }
   };
