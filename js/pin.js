@@ -113,6 +113,10 @@
     init: function () {
       pin.appendToMap();
       pin.addEventListeners();
+      form.setAddress({
+        x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
+        y: mainPin.offsetTop + PIN_MAIN_HEIGHT
+      });
     },
     deactivate: function () {
       if (pin.active !== null) {
