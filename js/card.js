@@ -78,7 +78,8 @@
 
   app.card = {
     open: openCard,
-    fill: fillCard
+    fill: fillCard,
+    addEventListeners: addEventListeners
   };
 
   initCard();

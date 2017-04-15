@@ -26,7 +26,7 @@
       pinItem.classList.add('pin--active');
       card().fill(data().offers[pinItem.dataset.index]);
       activePin = pinItem;
-      card().open();
+      app.showCard();
     }
   };
   var deactivatePin = function () {
