@@ -2,11 +2,8 @@
 
 (function (app) {
 
-  var OFFER_TYPE_MINCOST = {
-    flat: 1000,
-    house: 10000,
-    bungalo: 0
-  };
+  var pin = app.factory.getPin;
+
   var KEYCODE_ENTER = 13;
 
   // noticeForm
@@ -20,99 +17,87 @@
   var selectCapacity = noticeForm.querySelector('#capacity');
   var inputAddress = noticeForm.querySelector('#address');
 
-  // Объект формы
-  var form = {
-    validate: function () {
-      var result = true;
-      [].forEach.call(noticeForm, function (item) {
-        if (!item.validity.valid) {
-          item.classList.add('field--invalid');
-          result = false;
-        } else {
-          item.classList.remove('field--invalid');
-        }
-      });
-      return result;
+  var sync = {
+    value: function (element, value) {
+      element.value = value;
     },
-    submitFormHandler: function (e) {
-      noticeForm.reset();
-      e.preventDefault();
-    },
-    submitClickHandler: function (e) {
-      if (!form.validate()) {
-        e.preventDefault();
-      }
-    },
-    submitKeydownHandler: function (e) {
-      if (e.keyCode === KEYCODE_ENTER) {
-        if (!form.validate()) {
-          e.preventDefault();
-        }
-      }
-    },
-    selectCapacityHandler: function () {
-      if (selectCapacity.value === '0') {
-        selectRoomNum.value = 1;
-      } else if (selectCapacity.value === '3') {
-        selectRoomNum.value = 2;
-      }
-    },
-    inputOfferPriceHandler: function (e) {
-      var buildingType = 'flat';
-      if (inputOfferPrice.value < OFFER_TYPE_MINCOST['flat']) {
-        buildingType = 'bungalo';
-      } else if (inputOfferPrice.value >= OFFER_TYPE_MINCOST['house']) {
-        buildingType = 'house';
-      }
-      if (selectBuildingType.value !== buildingType) {
-        selectBuildingType.value = buildingType;
-        inputOfferPrice.setAttribute('min', OFFER_TYPE_MINCOST[buildingType]);
-      }
-    },
-    selectRoomNumHandler: function (e) {
-      var capacityValue;
-      switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
-        case '1': capacityValue = 0; break;
-        case '2':
-        case '100': capacityValue = 3; break;
-        default: capacityValue = 1;
-      }
-      selectCapacity.value = capacityValue;
-    },
-    selectBuildingHandler: function (e) {
-      var minPrice = OFFER_TYPE_MINCOST[selectBuildingType.children[selectBuildingType.selectedIndex].value];
-      inputOfferPrice.setAttribute('min', minPrice);
-      inputOfferPrice.value = minPrice;
-    },
-    selectSameTimeHandler: function (e) {
-      var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
-      itemToChange.children[e.currentTarget.selectedIndex].selected = true;
-    },
-    inputAddressHandler: function () {
-      app.pin.setMainPinCoords(inputAddress.value);
+    min: function (element, value) {
+      element.min = value;
     }
   };
 
-  var formPublic = {
-    init: function () {
-      noticeForm.addEventListener('submit', form.submitFormHandler);
-      submitButton.addEventListener('click', form.submitClickHandler);
-      submitButton.addEventListener('keydown', form.submitKeydownHandler);
-      selectTimeIn.addEventListener('change', form.selectSameTimeHandler);
-      selectTimeOut.addEventListener('change', form.selectSameTimeHandler);
-      selectBuildingType.addEventListener('change', form.selectBuildingHandler);
-      inputOfferPrice.addEventListener('input', form.inputOfferPriceHandler);
-      selectRoomNum.addEventListener('change', form.selectRoomNumHandler);
-      selectCapacity.addEventListener('change', form.selectCapacityHandler);
-      inputAddress.addEventListener('input', form.inputAddressHandler);
-    },
+  var validateForm = function () {
+    var result = true;
+    [].forEach.call(noticeForm, function (item) {
+      if (!item.validity.valid) {
+        item.classList.add('field--invalid');
+        result = false;
+      } else {
+        item.classList.remove('field--invalid');
+      }
+    });
+    return result;
+  };
+
+  var submitFormHandler = function (e) {
+    noticeForm.reset();
+    e.preventDefault();
+  };
+  var submitClickHandler = function (e) {
+    if (!validateForm()) {
+      e.preventDefault();
+    }
+  };
+  var submitKeydownHandler = function (e) {
+    if (e.keyCode === KEYCODE_ENTER) {
+      if (!validateForm()) {
+        e.preventDefault();
+      }
+    }
+  };
+
+  var selectCapacityHandler = function () {
+    app.synchronizeFields(selectCapacity, selectRoomNum, ['0', '3', '3'], ['1', '2', '100'], sync.value);
+  };
+
+  var selectRoomNumHandler = function (e) {
+    app.synchronizeFields(selectRoomNum, selectCapacity, ['1', '2', '100'], ['0', '3', '3'], sync.value);
+  };
+
+  var selectBuildingHandler = function (e) {
+    app.synchronizeFields(selectBuildingType, inputOfferPrice, ['flat', 'bungalo', 'house'], [1000, 0, 10000], sync.min);
+  };
+
+  var selectSameTimeInHandler = function (e) {
+    app.synchronizeFields(selectTimeIn, selectTimeOut, ['12', '13', '14'], ['12', '13', '14'], sync.value);
+  };
+
+  var selectSameTimeOutHandler = function (e) {
+    app.synchronizeFields(selectTimeOut, selectTimeIn, ['12', '13', '14'], ['12', '13', '14'], sync.value);
+  };
+
+  var inputAddressHandler = function () {
+    pin().setMainPinCoords(inputAddress.value);
+  };
+
+  var addEventListeners = function () {
+    noticeForm.addEventListener('submit', submitFormHandler);
+    submitButton.addEventListener('click', submitClickHandler);
+    submitButton.addEventListener('keydown', submitKeydownHandler);
+    selectTimeIn.addEventListener('change', selectSameTimeInHandler);
+    selectTimeOut.addEventListener('change', selectSameTimeOutHandler);
+    selectBuildingType.addEventListener('change', selectBuildingHandler);
+    selectRoomNum.addEventListener('change', selectRoomNumHandler);
+    selectCapacity.addEventListener('change', selectCapacityHandler);
+    inputAddress.addEventListener('input', inputAddressHandler);
+  };
+
+  app.form = {
     setAddress: function (coords) {
       inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
     }
   };
 
-  // window.setMainPinAddress = setAddress;
-
-  app.form = formPublic;
+  addEventListeners();
 
 }(window.app));
