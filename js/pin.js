@@ -2,9 +2,9 @@
 
 (function (app) {
 
-  var data = app.factory.getData();
-  var form = app.factory.getForm();
-  var card = app.factory.getCard();
+  var data = app.factory.getData;
+  var form = app.factory.getForm;
+  var card = app.factory.getCard;
 
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
@@ -24,9 +24,9 @@
     if (pinItem.dataset.index && activePin !== pinItem) {
       deactivatePin();
       pinItem.classList.add('pin--active');
-      card.fill(data.offers[pinItem.dataset.index]);
+      card().fill(data().offers[pinItem.dataset.index]);
       activePin = pinItem;
-      card.open();
+      card().open();
     }
   };
   var deactivatePin = function () {
@@ -104,12 +104,12 @@
       y: mainPin.offsetTop + PIN_MAIN_HEIGHT
     };
 
-    form.setAddress(resultCoords);
+    form().setAddress(resultCoords);
   };
 
   var appendPinsToMap = function () {
     var pinsFragment = document.createDocumentFragment();
-    data.offers.forEach(function (offer, index) {
+    data().offers.forEach(function (offer, index) {
       pinsFragment.appendChild(createPin(offer, index));
     });
     pinMap.appendChild(pinsFragment);
@@ -118,7 +118,7 @@
   var initPin = function () {
     appendPinsToMap();
     addPinEventListeners();
-    form.setAddress({
+    form().setAddress({
       x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
       y: mainPin.offsetTop + PIN_MAIN_HEIGHT
     });

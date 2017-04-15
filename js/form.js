@@ -2,7 +2,7 @@
 
 (function (app) {
 
-  var pin = app.factory.getPin();
+  var pin = app.factory.getPin;
 
   var OFFER_TYPE_MINCOST = {
     flat: 1000,
@@ -75,7 +75,7 @@
 
   var selectRoomNumHandler = function (e) {
     var capacityValue;
-    switch (e.currentTarget.children[e.currentTarget.selectedIndex].value) {
+    switch (e.currentTarget.value) {
       case '1': capacityValue = 0; break;
       case '2':
       case '100': capacityValue = 3; break;
@@ -85,7 +85,7 @@
   };
 
   var selectBuildingHandler = function (e) {
-    var minPrice = OFFER_TYPE_MINCOST[selectBuildingType.children[selectBuildingType.selectedIndex].value];
+    var minPrice = OFFER_TYPE_MINCOST[selectBuildingType.value];
     inputOfferPrice.setAttribute('min', minPrice);
     inputOfferPrice.value = minPrice;
   };
@@ -96,7 +96,7 @@
   };
 
   var inputAddressHandler = function () {
-    pin.setMainPinCoords(inputAddress.value);
+    pin().setMainPinCoords(inputAddress.value);
   };
 
   var addEventListeners = function () {

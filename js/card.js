@@ -2,8 +2,8 @@
 
 (function (app) {
 
-  var data = app.factory.getData();
-  var pin = app.factory.getPin();
+  var data = app.factory.getData;
+  var pin = app.factory.getPin;
 
   var OFFER_TYPE_DESCRIPTIONS = {
     flat: 'Квартира',
@@ -46,7 +46,7 @@
     });
   };
   var closeCard = function () {
-    pin.deactivate();
+    pin().deactivate();
     offerDialog.style.display = 'none';
     removeEventListeners();
   };
@@ -72,7 +72,7 @@
   };
 
   var initCard = function () {
-    fillCard(data.offers[0]);
+    fillCard(data().offers[0]);
     addEventListeners();
   };
 
