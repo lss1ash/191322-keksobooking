@@ -4,11 +4,6 @@
 
   var pin = app.factory.getPin;
 
-  var OFFER_TYPE_MINCOST = {
-    flat: 1000,
-    house: 10000,
-    bungalo: 0
-  };
   var KEYCODE_ENTER = 13;
 
   // noticeForm
@@ -21,6 +16,15 @@
   var selectRoomNum = noticeForm.querySelector('#room_number');
   var selectCapacity = noticeForm.querySelector('#capacity');
   var inputAddress = noticeForm.querySelector('#address');
+
+  var sync = {
+    value: function (element, value) {
+      element.value = value;
+    },
+    min: function (element, value) {
+      element.min = value;
+    }
+  };
 
   var validateForm = function () {
     var result = true;
@@ -53,46 +57,23 @@
   };
 
   var selectCapacityHandler = function () {
-    if (selectCapacity.value === '0') {
-      selectRoomNum.value = 1;
-    } else if (selectCapacity.value === '3') {
-      selectRoomNum.value = 2;
-    }
-  };
-
-  var inputOfferPriceHandler = function (e) {
-    var buildingType = 'flat';
-    if (inputOfferPrice.value < OFFER_TYPE_MINCOST['flat']) {
-      buildingType = 'bungalo';
-    } else if (inputOfferPrice.value >= OFFER_TYPE_MINCOST['house']) {
-      buildingType = 'house';
-    }
-    if (selectBuildingType.value !== buildingType) {
-      selectBuildingType.value = buildingType;
-      inputOfferPrice.setAttribute('min', OFFER_TYPE_MINCOST[buildingType]);
-    }
+    app.synchronizeFields(selectCapacity, selectRoomNum, ['0', '3', '3'], ['1', '2', '100'], sync.value);
   };
 
   var selectRoomNumHandler = function (e) {
-    var capacityValue;
-    switch (e.currentTarget.value) {
-      case '1': capacityValue = 0; break;
-      case '2':
-      case '100': capacityValue = 3; break;
-      default: capacityValue = 1;
-    }
-    selectCapacity.value = capacityValue;
+    app.synchronizeFields(selectRoomNum, selectCapacity, ['1', '2', '100'], ['0', '3', '3'], sync.value);
   };
 
   var selectBuildingHandler = function (e) {
-    var minPrice = OFFER_TYPE_MINCOST[selectBuildingType.value];
-    inputOfferPrice.setAttribute('min', minPrice);
-    inputOfferPrice.value = minPrice;
+    app.synchronizeFields(selectBuildingType, inputOfferPrice, ['flat', 'bungalo', 'house'], [1000, 0, 10000], sync.min);
   };
 
-  var selectSameTimeHandler = function (e) {
-    var itemToChange = (e.currentTarget === selectTimeIn) ? selectTimeOut : selectTimeIn;
-    itemToChange.children[e.currentTarget.selectedIndex].selected = true;
+  var selectSameTimeInHandler = function (e) {
+    app.synchronizeFields(selectTimeIn, selectTimeOut, ['12', '13', '14'], ['12', '13', '14'], sync.value);
+  };
+
+  var selectSameTimeOutHandler = function (e) {
+    app.synchronizeFields(selectTimeOut, selectTimeIn, ['12', '13', '14'], ['12', '13', '14'], sync.value);
   };
 
   var inputAddressHandler = function () {
@@ -103,10 +84,9 @@
     noticeForm.addEventListener('submit', submitFormHandler);
     submitButton.addEventListener('click', submitClickHandler);
     submitButton.addEventListener('keydown', submitKeydownHandler);
-    selectTimeIn.addEventListener('change', selectSameTimeHandler);
-    selectTimeOut.addEventListener('change', selectSameTimeHandler);
+    selectTimeIn.addEventListener('change', selectSameTimeInHandler);
+    selectTimeOut.addEventListener('change', selectSameTimeOutHandler);
     selectBuildingType.addEventListener('change', selectBuildingHandler);
-    inputOfferPrice.addEventListener('input', inputOfferPriceHandler);
     selectRoomNum.addEventListener('change', selectRoomNumHandler);
     selectCapacity.addEventListener('change', selectCapacityHandler);
     inputAddress.addEventListener('input', inputAddressHandler);
