@@ -677,12 +677,4 @@ select option:hover {
   border: 3px solid #ff6d51;
 
   background-color: #f0f0ea;
-
-  transition: opacity 0.5s;
-  opacity: 1;
-}
-
-.message__dialog--hidden {
-  display: none;
-  opacity: 0;
 }
