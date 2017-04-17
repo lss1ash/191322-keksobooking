@@ -110,7 +110,11 @@
   var appendPinsToMap = function () {
     var pinsFragment = document.createDocumentFragment();
     data().offers.forEach(function (offer, index) {
-      pinsFragment.appendChild(createPin(offer, index));
+      var currentPin = createPin(offer, index);
+      if (index === 0) {
+        activatePin(currentPin);
+      }
+      pinsFragment.appendChild(currentPin);
     });
     pinMap.appendChild(pinsFragment);
   };

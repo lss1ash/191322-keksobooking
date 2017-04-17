@@ -2,7 +2,6 @@
 
 (function (app) {
 
-  var data = app.factory.getData;
   var pin = app.factory.getPin;
 
   var OFFER_TYPE_DESCRIPTIONS = {
@@ -71,19 +70,10 @@
     }
   };
 
-  var initCard = function () {
-    if (data().offers.length > 0) {
-      fillCard(data().offers[0]);
-    }
-    addEventListeners();
-  };
-
   app.card = {
     open: openCard,
     fill: fillCard,
     addEventListeners: addEventListeners
   };
-
-  // initCard();
 
 }(window.app));
