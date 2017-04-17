@@ -6,7 +6,6 @@
 
   var KEYCODE_ENTER = 13;
 
-  // noticeForm
   var noticeForm = document.querySelector('.notice__form');
   var submitButton = noticeForm.querySelector('.form__submit');
   var selectTimeIn = noticeForm.querySelector('#time');

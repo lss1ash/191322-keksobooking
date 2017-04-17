@@ -5,6 +5,8 @@
   // Константы
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
+  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+  var PINS_ON_MAP = 8;
 
   var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var offerTitles = [
@@ -38,8 +40,7 @@
   };
 
   var fillOffersArray = function () {
-    shuffle(offerFeatures);
-    return createArray(8).map(function (cur, ind) {
+    return createArray(PINS_ON_MAP).map(function (cur, ind) {
       var loc = {
         'x': getRandomNumber(300, 900),
         'y': getRandomNumber(100, 500)
@@ -68,14 +69,19 @@
     });
   };
 
-  var offersArray = (function () {
-    avatars = createArray(8).map(function (cur, i) {
-      return i + 1;
-    });
-    shuffle(avatars);
-    shuffle(offerTitles);
-    return fillOffersArray();
-  }());
+  var offersArray = [];
+  var loadSuccess = function (response) {
+    offersArray = response;
+  };
+  var loadError = function (msg) {
+    console.log(msg);
+  };
+
+  app.load(DATA_URL, loadSuccess, loadError);
+  // var offersArray = (function () {
+  //   app.load(DATA_URL, loadSuccess, loadError);
+  //   return fillOffersArray();
+  // }());
 
   app.data = {
     offers: offersArray

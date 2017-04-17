@@ -659,3 +659,21 @@ select option:hover {
   border-color: #ffaa99;
   box-shadow: 0 0 4px 1px #ff6547;
 }
+
+.message__dialog
+{
+    position: fixed;
+    z-index: 1000;
+
+    top: 40%;
+    left: 30%;
+    right: 30%;
+
+    box-sizing: border-box;
+    width: 500px;
+    margin: 0 auto;
+    padding: 5px 20px;
+
+    border-radius: 10px;
+    background-color: #f8f7f4;
+}

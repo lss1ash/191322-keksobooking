@@ -82,6 +82,6 @@
     addEventListeners: addEventListeners
   };
 
-  initCard();
+  // initCard();
 
 }(window.app));
