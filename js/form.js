@@ -44,15 +44,11 @@
     e.preventDefault();
   };
   var submitClickHandler = function (e) {
-    if (!validateForm()) {
-      e.preventDefault();
-    }
+    validateForm();
   };
   var submitKeydownHandler = function (e) {
     if (e.keyCode === KEYCODE_ENTER) {
-      if (!validateForm()) {
-        e.preventDefault();
-      }
+      validateForm();
     }
   };
 
