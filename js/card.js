@@ -72,7 +72,9 @@
   };
 
   var initCard = function () {
-    fillCard(data().offers[0]);
+    if (data().offers.length > 0) {
+      fillCard(data().offers[0]);
+    }
     addEventListeners();
   };
 

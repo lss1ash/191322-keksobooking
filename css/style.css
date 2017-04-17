@@ -660,12 +660,11 @@ select option:hover {
   box-shadow: 0 0 4px 1px #ff6547;
 }
 
-.message__dialog
-{
+.message__dialog {
     position: fixed;
     z-index: 1000;
 
-    top: 40%;
+    top: 30%;
     left: 30%;
     right: 30%;
 
@@ -675,5 +674,10 @@ select option:hover {
     padding: 5px 20px;
 
     border-radius: 10px;
-    background-color: #f8f7f4;
+    border: 3px solid #ff6d51;
+
+    background-color: #f0f0ea;
+
+    display: none;
+    opacity: 0;
 }

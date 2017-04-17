@@ -2,6 +2,8 @@
 
 (function (app) {
 
+  var pin = app.factory.getPin;
+
   // Константы
   var OFFER_TYPES = ['flat', 'house', 'bungalo'];
   var OFFER_CHECKS = ['12:00', '13:00', '14:00'];
@@ -69,22 +71,16 @@
     });
   };
 
-  var offersArray = [];
   var loadSuccess = function (response) {
-    offersArray = response;
+    app.data = {
+      offers: response
+    };
+    pin().append();
   };
   var loadError = function (msg) {
     console.log(msg);
   };
 
   app.load(DATA_URL, loadSuccess, loadError);
-  // var offersArray = (function () {
-  //   app.load(DATA_URL, loadSuccess, loadError);
-  //   return fillOffersArray();
-  // }());
-
-  app.data = {
-    offers: offersArray
-  };
 
 }(window.app));

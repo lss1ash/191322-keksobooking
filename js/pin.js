@@ -116,8 +116,6 @@
   };
 
   var initPin = function () {
-    appendPinsToMap();
-    addPinEventListeners();
     form().setAddress({
       x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
       y: mainPin.offsetTop + PIN_MAIN_HEIGHT
@@ -126,6 +124,10 @@
 
   app.pin = {
     deactivate: deactivatePin,
+    append: function () {
+      appendPinsToMap();
+      addPinEventListeners();
+    },
     setMainPinCoords: function (coordsStr) {
       var coords = coordsStr.replace(/\s/g, '').split(',');
       var rightFormat = coords.length === 2 && coords[0].slice(0, 2).toLowerCase() === 'x:' && coords[1].slice(0, 2).toLowerCase() === 'y:';
