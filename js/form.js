@@ -42,9 +42,6 @@
     noticeForm.reset();
     e.preventDefault();
   };
-  var submitClickHandler = function (e) {
-    validateForm();
-  };
   var submitKeydownHandler = function (e) {
     if (e.keyCode === KEYCODE_ENTER) {
       validateForm();
@@ -77,7 +74,7 @@
 
   var addEventListeners = function () {
     noticeForm.addEventListener('submit', submitFormHandler);
-    submitButton.addEventListener('click', submitClickHandler);
+    submitButton.addEventListener('click', validateForm);
     submitButton.addEventListener('keydown', submitKeydownHandler);
     selectTimeIn.addEventListener('change', selectSameTimeInHandler);
     selectTimeOut.addEventListener('change', selectSameTimeOutHandler);
