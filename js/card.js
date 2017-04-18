@@ -32,6 +32,13 @@
     fillCardFeatures(cloneRoot.children[6], item.offer.features);
     cloneRoot.children[7].textContent = item.offer.description;
 
+    item.offer.photos.forEach(function (curPhoto) {
+      var imgNode = new Image(52, 42);
+      imgNode.setAttribute('src', curPhoto);
+      imgNode.setAttribute('alt', 'Lodge photo');
+      cloneRoot.children[8].appendChild(imgNode);
+    });
+
     offerAvatar.setAttribute('src', item.author.avatar);
     offerDialog.replaceChild(lodgeClone, currentDialog);
 
