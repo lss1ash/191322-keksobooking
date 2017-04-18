@@ -4,7 +4,7 @@
 
   var pin = app.factory.getPin;
 
-  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/dat';
   var messageBoxTemplate = document.getElementById('message-box');
 
   var loadSuccess = function (response) {
@@ -15,10 +15,12 @@
   };
   var loadError = function (msgHeader, msgParagraph) {
     var message = messageBoxTemplate.content.cloneNode(true);
-    var cloneRoot = message.children[0];
+    var cloneRoot = message.firstElementChild;
 
-    cloneRoot.children[0].textContent = msgHeader;
-    cloneRoot.children[1].textContent = msgParagraph;
+    var html = cloneRoot.innerHTML;
+    html = html.replace('{header}', msgHeader);
+    html = html.replace('{message}', msgParagraph);
+    cloneRoot.innerHTML = html;
 
     document.body.appendChild(message);
   };
