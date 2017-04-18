@@ -4,7 +4,7 @@
 
   var pin = app.factory.getPin;
 
-  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/dat';
+  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
   var messageBoxTemplate = document.getElementById('message-box');
 
   var loadSuccess = function (response) {
