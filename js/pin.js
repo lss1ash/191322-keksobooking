@@ -107,9 +107,12 @@
     form().setAddress(resultCoords);
   };
 
-  var appendPinsToMap = function () {
+  var appendPinsToMap = function (pinArray) {
+    if (pinMap.children.length > 1) {
+      removePinsFromMap();
+    }
     var pinsFragment = document.createDocumentFragment();
-    data().offers.forEach(function (offer, index) {
+    pinArray.forEach(function (offer, index) {
       var currentPin = createPin(offer, index);
       if (index === 0) {
         activatePin(currentPin);
@@ -117,6 +120,13 @@
       pinsFragment.appendChild(currentPin);
     });
     pinMap.appendChild(pinsFragment);
+  };
+  var removePinsFromMap = function () {
+    [].forEach.call(pinMap.children, function (current, index) {
+      if (index !== 0) {
+        pinMap.removeChild(current);
+      }
+    });
   };
 
   var initPin = function () {
@@ -128,8 +138,8 @@
 
   app.pin = {
     deactivate: deactivatePin,
-    append: function () {
-      appendPinsToMap();
+    append: function (arr) {
+      appendPinsToMap(arr);
       addPinEventListeners();
     },
     setMainPinCoords: function (coordsStr) {
