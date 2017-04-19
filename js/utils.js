@@ -10,6 +10,10 @@
     return newArr;
   };
 
+  function shuffle(array) {
+    array.forEach(reorderItem);
+  }
+
   var getRandomItem = function (items) {
     var min = 0;
     var max = items.length - 1;
