@@ -2,7 +2,6 @@
 
 (function (app) {
 
-  var data = app.factory.getData;
   var pin = app.factory.getPin;
 
   var OFFER_TYPE_DESCRIPTIONS = {
@@ -12,7 +11,7 @@
   };
 
   var offerDialog = document.getElementById('offer-dialog');
-  var offerAvatar = offerDialog.querySelector('.dialog__title').children[0];
+  var offerAvatar = offerDialog.querySelector('.dialog__title').firstElementChild;
   var currentDialog = offerDialog.querySelector('.dialog__panel');
   var dialogClose = offerDialog.querySelector('.dialog__close');
   var lodgeTemplate = document.getElementById('lodge-template');
@@ -23,15 +22,16 @@
   };
   var fillCard = function (item) {
     var lodgeClone = lodgeTemplate.content.cloneNode(true);
-    var cloneRoot = lodgeClone.children[0]; // dialog__panel
-    cloneRoot.children[0].textContent = item.offer.title;
-    cloneRoot.children[1].textContent = item.offer.address;
-    cloneRoot.children[2].innerHTML = item.offer.price + '&#x20bd;/ночь';
-    cloneRoot.children[3].textContent = OFFER_TYPE_DESCRIPTIONS[item.offer.type];
-    cloneRoot.children[4].textContent = 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах';
-    cloneRoot.children[5].textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
-    fillCardFeatures(cloneRoot.children[6], item.offer.features);
-    cloneRoot.children[7].textContent = item.offer.description;
+    var cloneRoot = lodgeClone.firstElementChild; // dialog__panel
+    cloneRoot.querySelector('.lodge__title').textContent = item.offer.title;
+    cloneRoot.querySelector('.lodge__address').textContent = item.offer.address;
+    cloneRoot.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
+    cloneRoot.querySelector('.lodge__type').textContent = OFFER_TYPE_DESCRIPTIONS[item.offer.type];
+    cloneRoot.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + item.offer.guests + ' гостей в ' + item.offer.rooms + ' комнатах';
+    cloneRoot.querySelector('.lodge__checkin-time').textContent = 'Заезд после ' + item.offer.checkin + ', выезд до ' + item.offer.checkout;
+    fillCardFeatures(cloneRoot.querySelector('.lodge__features'), item.offer.features);
+    cloneRoot.querySelector('.lodge__description').textContent = item.offer.description;
+    fillCardPhotos(cloneRoot.querySelector('.lodge__photos'), item.offer.photos);
 
     offerAvatar.setAttribute('src', item.author.avatar);
     offerDialog.replaceChild(lodgeClone, currentDialog);
@@ -43,6 +43,14 @@
       var newSpan = document.createElement('span');
       newSpan.classList.add('feature__image', 'feature__image--' + feature);
       lodgeCloneFeatures.appendChild(newSpan);
+    });
+  };
+  var fillCardPhotos = function (lodgeClonePhotos, photos) {
+    photos.forEach(function (curPhoto) {
+      var imgNode = new Image(52, 42);
+      imgNode.setAttribute('src', curPhoto);
+      imgNode.setAttribute('alt', 'Lodge photo');
+      lodgeClonePhotos.appendChild(imgNode);
     });
   };
   var closeCard = function () {
@@ -71,17 +79,10 @@
     }
   };
 
-  var initCard = function () {
-    fillCard(data().offers[0]);
-    addEventListeners();
-  };
-
   app.card = {
     open: openCard,
     fill: fillCard,
     addEventListeners: addEventListeners
   };
-
-  initCard();
 
 }(window.app));

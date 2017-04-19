@@ -6,7 +6,6 @@
 
   var KEYCODE_ENTER = 13;
 
-  // noticeForm
   var noticeForm = document.querySelector('.notice__form');
   var submitButton = noticeForm.querySelector('.form__submit');
   var selectTimeIn = noticeForm.querySelector('#time');
@@ -43,16 +42,9 @@
     noticeForm.reset();
     e.preventDefault();
   };
-  var submitClickHandler = function (e) {
-    if (!validateForm()) {
-      e.preventDefault();
-    }
-  };
   var submitKeydownHandler = function (e) {
     if (e.keyCode === KEYCODE_ENTER) {
-      if (!validateForm()) {
-        e.preventDefault();
-      }
+      validateForm();
     }
   };
 
@@ -82,7 +74,7 @@
 
   var addEventListeners = function () {
     noticeForm.addEventListener('submit', submitFormHandler);
-    submitButton.addEventListener('click', submitClickHandler);
+    submitButton.addEventListener('click', validateForm);
     submitButton.addEventListener('keydown', submitKeydownHandler);
     selectTimeIn.addEventListener('change', selectSameTimeInHandler);
     selectTimeOut.addEventListener('change', selectSameTimeOutHandler);
