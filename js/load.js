@@ -17,7 +17,6 @@
       switch (xhr.status.toString().slice(0, 1)) {
         case HTTP_STATUS.SUCCESS:
           successCallback(xhr.response);
-          removeEventListeners();
           break;
         case HTTP_STATUS.CLIENT_ERROR:
           errorCallback('Ошибка!', 'При получении данных произошла ошибка клиента:<br>' + xhr.status + ' ' + xhr.statusText);
@@ -40,14 +39,9 @@
     };
 
     var addEventListeners = function () {
-      xhr.addEventListener('load', loadHandler);
-      xhr.addEventListener('error', errorHandler);
-      xhr.addEventListener('timeout', timeoutHandler);
-    };
-    var removeEventListeners = function () {
-      xhr.removeEventListener('load', loadHandler);
-      xhr.removeEventListener('error', errorHandler);
-      xhr.removeEventListener('timeout', timeoutHandler);
+      xhr.onload = loadHandler;
+      xhr.onerror = errorHandler;
+      xhr.ontimeout = timeoutHandler;
     };
 
     addEventListeners();
