@@ -11,9 +11,11 @@
 
   var loadSuccess = function (response) {
     app.data = {
-      offers: response
+      offers: response,
+      loadedOffers: response.slice()
     };
-    pin().append(utils().getRandomArrayFrom(response, INITIAL_PINS_COUNT));
+    utils().getRandomArray(INITIAL_PINS_COUNT);
+    pin().append();
   };
   var loadError = function (msgHeader, msgParagraph) {
     var message = messageBoxTemplate.content.cloneNode(true);

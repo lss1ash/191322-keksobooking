@@ -2,10 +2,11 @@
 
 (function (app) {
 
-  var getRandomArrayFrom = function (arrayFrom, length) {
-    var shuffled = arrayFrom.slice();
-    shuffle(shuffled);
-    return shuffled.slice(0, length);
+  var data = app.factory.getData;
+
+  var getRandomArray = function (length) {
+    shuffle(data().offers);
+    data().offers = data().offers.slice(0, length);
   };
 
   var reorderItem = function (item, index, array) {
@@ -24,7 +25,7 @@
   };
 
   app.utils = {
-    getRandomArrayFrom: getRandomArrayFrom
+    getRandomArray: getRandomArray
   };
 
 }(window.app));

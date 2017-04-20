@@ -20,11 +20,11 @@
     y: 0
   };
 
-  var activatePin = function (pinItem, pinData) {
+  var activatePin = function (pinItem) {
     if (pinItem.dataset.index && activePin !== pinItem) {
       deactivatePin();
       pinItem.classList.add('pin--active');
-      card().fill(pinData);
+      card().fill(data().offers[pinItem.dataset.index]);
       activePin = pinItem;
       app.showCard();
     }
@@ -107,12 +107,12 @@
     form().setAddress(resultCoords);
   };
 
-  var appendPinsToMap = function (pinArray) {
+  var appendPinsToMap = function () {
     if (pinMap.children.length > 1) {
       removePinsFromMap();
     }
     var pinsFragment = document.createDocumentFragment();
-    pinArray.forEach(function (offer, index) {
+    data().offers.forEach(function (offer, index) {
       var currentPin = createPin(offer, index);
       if (index === 0) {
         activatePin(currentPin, offer);
@@ -138,8 +138,8 @@
 
   app.pin = {
     deactivate: deactivatePin,
-    append: function (arr) {
-      appendPinsToMap(arr);
+    append: function () {
+      appendPinsToMap();
       addPinEventListeners();
     },
     setMainPinCoords: function (coordsStr) {
