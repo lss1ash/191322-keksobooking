@@ -20,11 +20,11 @@
     y: 0
   };
 
-  var activatePin = function (pinItem) {
+  var activatePin = function (pinItem, pinData) {
     if (pinItem.dataset.index && activePin !== pinItem) {
       deactivatePin();
       pinItem.classList.add('pin--active');
-      card().fill(data().offers[pinItem.dataset.index]);
+      card().fill(pinData);
       activePin = pinItem;
       app.showCard();
     }
@@ -115,7 +115,7 @@
     pinArray.forEach(function (offer, index) {
       var currentPin = createPin(offer, index);
       if (index === 0) {
-        activatePin(currentPin);
+        activatePin(currentPin, offer);
       }
       pinsFragment.appendChild(currentPin);
     });

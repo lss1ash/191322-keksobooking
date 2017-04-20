@@ -3,21 +3,20 @@
 (function (app) {
 
   var getRandomArrayFrom = function (arrayFrom, length) {
-    var newArr = [];
-    while (newArr.length < length) {
-      newArr.push(getRandomItem(arrayFrom));
-    }
-    return newArr;
+    var shuffled = arrayFrom.slice();
+    shuffle(shuffled);
+    return shuffled.slice(0, length);
   };
 
-  function shuffle(array) {
-    array.forEach(reorderItem);
-  }
+  var reorderItem = function (item, index, array) {
+    var random = getRandomNumber(0, array.length - 1);
+    var saved = array[random];
+    array[random] = item;
+    array[index] = saved;
+  };
 
-  var getRandomItem = function (items) {
-    var min = 0;
-    var max = items.length - 1;
-    return items[getRandomNumber(min, max)];
+  var shuffle = function (array) {
+    array.forEach(reorderItem);
   };
 
   var getRandomNumber = function (min, max) {
