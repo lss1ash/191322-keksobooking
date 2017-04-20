@@ -14,7 +14,7 @@
   <section class="tokyo">
     <img src="img/main.png" alt="Tokyo" width="1200" height="700">
     <div class="tokyo__filters-container">
-      <form action="#" class="tokyo__filters" autocomplete="off">
+      <form action="#" class="tokyo__filters" name="tokyo__filters" autocomplete="off">
         <label><select name="housing_type" id="housing_type" class="tokyo__filter">
           <option value="any" selected>Любой тип жилья</option>
           <option value="flat">Квартира</option>
@@ -22,7 +22,8 @@
           <option value="bungalo">Сарай</option>
         </select></label>
         <label><select name="housing_price" id="housing_price" class="tokyo__filter">
-          <option value="middle" selected>10000 - 50000&#x20bd;</option>
+          <option value="any" selected>Любая стоимость</option>
+          <option value="middle">10000 - 50000&#x20bd;</option>
           <option value="low">до 10000&#x20bd;</option>
           <option value="high">от 50000&#x20bd;</option>
         </select></label>

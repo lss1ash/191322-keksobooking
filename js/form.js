@@ -16,6 +16,21 @@
   var selectCapacity = noticeForm.querySelector('#capacity');
   var inputAddress = noticeForm.querySelector('#address');
 
+  var currentFilter = {
+    type: 'any',
+    price: 'any',
+    rooms: 'any',
+    guests: 'any',
+    features: {
+      wifi: false,
+      dishwasher: false,
+      parking: false,
+      washer: false,
+      elevator: false,
+      conditione: false
+    }
+  };
+
   var sync = {
     value: function (element, value) {
       element.value = value;
@@ -72,6 +87,29 @@
     pin().setMainPinCoords(inputAddress.value);
   };
 
+  var changeSelectFilterHandler = function (e) {
+    var selectType;
+    switch (e.currentTarget.name) {
+      case 'housing_type':
+        selectType = 'type';
+        break;
+      case 'housing_price':
+        selectType = 'price';
+        break;
+      case 'housing_room-number':
+        selectType = 'rooms';
+        break;
+      case 'housing_guests-number':
+        selectType = 'type';
+        break;
+    }
+    currentFilter[selectType] = e.currentTarget.value;
+  };
+
+  var changeCheckboxFilterHandler = function (e) {
+    currentFilter.features[e.currentTarget.value] = e.currentTarget.checked;
+  };
+
   var addEventListeners = function () {
     noticeForm.addEventListener('submit', submitFormHandler);
     submitButton.addEventListener('click', validateForm);
@@ -82,6 +120,15 @@
     selectRoomNum.addEventListener('change', selectRoomNumHandler);
     selectCapacity.addEventListener('change', selectCapacityHandler);
     inputAddress.addEventListener('input', inputAddressHandler);
+
+    document.forms.tokyo__filters.elements['housing_type'].addEventListener('change', changeSelectFilterHandler);
+    document.forms.tokyo__filters.elements['housing_price'].addEventListener('change', changeSelectFilterHandler);
+    document.forms.tokyo__filters.elements['housing_room-number'].addEventListener('change', changeSelectFilterHandler);
+    document.forms.tokyo__filters.elements['housing_guests-number'].addEventListener('change', changeSelectFilterHandler);
+
+    [].forEach.call(document.forms.tokyo__filters.elements.feature, function (checkbox) {
+      checkbox.addEventListener('change', changeCheckboxFilterHandler);
+    });
   };
 
   app.form = {

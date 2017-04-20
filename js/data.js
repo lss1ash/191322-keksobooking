@@ -29,6 +29,14 @@
     document.body.appendChild(message);
   };
 
+  var filterAlg = function (current) {
+    if (this.type && !current.features.type)
+  };
+
+  var filterOffers = function (filterObj) {
+    app.data.offers = app.data.loadedOffers.slice().filter(filterAlg, filterObj);
+  };
+
   app.load(DATA_URL, loadSuccess, loadError);
 
 }(window.app));
