@@ -2,6 +2,7 @@
 
 (function (app) {
 
+  var data = app.factory.getData;
   var pin = app.factory.getPin;
 
   var KEYCODE_ENTER = 13;
@@ -100,14 +101,22 @@
         selectType = 'rooms';
         break;
       case 'housing_guests-number':
-        selectType = 'type';
+        selectType = 'guests';
         break;
     }
-    currentFilter[selectType] = e.currentTarget.value;
+    if (selectType === 'type' || selectType === 'price' || e.currentTarget.value === 'any') {
+      currentFilter[selectType] = e.currentTarget.value;
+    } else {
+      currentFilter[selectType] = +e.currentTarget.value;
+    }
+    data().filterOffers();
+    pin().append();
   };
 
   var changeCheckboxFilterHandler = function (e) {
     currentFilter.features[e.currentTarget.value] = e.currentTarget.checked;
+    data().filterOffers();
+    pin().append();
   };
 
   var addEventListeners = function () {
@@ -134,7 +143,8 @@
   app.form = {
     setAddress: function (coords) {
       inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
-    }
+    },
+    currentFilter: currentFilter
   };
 
   addEventListeners();

@@ -122,11 +122,9 @@
     pinMap.appendChild(pinsFragment);
   };
   var removePinsFromMap = function () {
-    [].forEach.call(pinMap.children, function (current, index) {
-      if (index !== 0) {
-        pinMap.removeChild(current);
-      }
-    });
+    while (pinMap.children.length > 1) {
+      pinMap.removeChild(pinMap.lastElementChild);
+    }
   };
 
   var initPin = function () {
