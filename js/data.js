@@ -60,7 +60,7 @@
   var featuresComparator = function (features, current) {
     var keys = Object.keys(features);
     for (var i = 0; i < keys.length; i++) {
-      if (features[keys[i]] && current.indexOf([keys[i]]) < 0) {
+      if (features[keys[i]] && current.indexOf(keys[i]) < 0) {
         return false;
       }
     }
