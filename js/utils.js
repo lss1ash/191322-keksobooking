@@ -4,7 +4,7 @@
 
   var data = app.factory.getData;
 
-  var DEBOUNCE_INTERVAL = 300;
+  var DEBOUNCE_INTERVAL = 500;
 
   var lastTimeout;
 

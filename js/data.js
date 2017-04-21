@@ -19,6 +19,7 @@
     app.data.offers = response;
     app.data.loadedOffers = response.slice();
 
+    form().addFilterEventListeners();
     utils().getRandomArray(INITIAL_PINS_COUNT);
     pin().append();
   };

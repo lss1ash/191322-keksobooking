@@ -4,6 +4,7 @@
 
   var data = app.factory.getData;
   var pin = app.factory.getPin;
+  var utils = app.factory.getUtils;
 
   var KEYCODE_ENTER = 13;
 
@@ -109,12 +110,15 @@
     } else {
       currentFilter[selectType] = +e.currentTarget.value;
     }
-    data().filterOffers();
-    pin().append();
+    utils().debounce(filterAndRedraw);
   };
 
   var changeCheckboxFilterHandler = function (e) {
     currentFilter.features[e.currentTarget.value] = e.currentTarget.checked;
+    utils().debounce(filterAndRedraw);
+  };
+
+  var filterAndRedraw = function () {
     data().filterOffers();
     pin().append();
   };
@@ -129,7 +133,9 @@
     selectRoomNum.addEventListener('change', selectRoomNumHandler);
     selectCapacity.addEventListener('change', selectCapacityHandler);
     inputAddress.addEventListener('input', inputAddressHandler);
+  };
 
+  var addFilterEventListeners = function () {
     document.forms.tokyo__filters.elements['housing_type'].addEventListener('change', changeSelectFilterHandler);
     document.forms.tokyo__filters.elements['housing_price'].addEventListener('change', changeSelectFilterHandler);
     document.forms.tokyo__filters.elements['housing_room-number'].addEventListener('change', changeSelectFilterHandler);
@@ -144,7 +150,8 @@
     setAddress: function (coords) {
       inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
     },
-    currentFilter: currentFilter
+    currentFilter: currentFilter,
+    addFilterEventListeners: addFilterEventListeners
   };
 
   addEventListeners();
