@@ -109,7 +109,7 @@
 
   var appendPinsToMap = function () {
     if (pinMap.children.length > 1) {
-      deactivatePin();
+      card().close();
       removePinsFromMap();
     }
     var pinsFragment = document.createDocumentFragment();

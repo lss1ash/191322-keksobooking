@@ -82,6 +82,7 @@
   app.card = {
     open: openCard,
     fill: fillCard,
+    close: closeCard,
     addEventListeners: addEventListeners
   };
 
