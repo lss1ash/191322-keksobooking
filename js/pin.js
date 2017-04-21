@@ -109,6 +109,7 @@
 
   var appendPinsToMap = function () {
     if (pinMap.children.length > 1) {
+      deactivatePin();
       removePinsFromMap();
     }
     var pinsFragment = document.createDocumentFragment();
