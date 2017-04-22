@@ -8,6 +8,15 @@
 
   var KEYCODE_ENTER = 13;
 
+  // filter form
+  var filterForm = document.querySelector('.tokyo__filters');
+  var housingType = filterForm.querySelector('#housing_type');
+  var housingPrice = filterForm.querySelector('#housing_price');
+  var roomsNumber = filterForm.querySelector('#housing_room-number');
+  var guestsNumber = filterForm.querySelector('#housing_guests-number');
+  var filterFeatures = filterForm.querySelectorAll('input[name=\"feature\"]');
+
+  // main form
   var noticeForm = document.querySelector('.notice__form');
   var submitButton = noticeForm.querySelector('.form__submit');
   var selectTimeIn = noticeForm.querySelector('#time');
@@ -90,21 +99,14 @@
   };
 
   var changeSelectFilterHandler = function (e) {
-    var selectType;
-    switch (e.currentTarget.name) {
-      case 'housing_type':
-        selectType = 'type';
-        break;
-      case 'housing_price':
-        selectType = 'price';
-        break;
-      case 'housing_room-number':
-        selectType = 'rooms';
-        break;
-      case 'housing_guests-number':
-        selectType = 'guests';
-        break;
-    }
+    var selectMap = {
+      'housing_type': 'type',
+      'housing_price': 'price',
+      'housing_room-number': 'rooms',
+      'housing_guests-number': 'guests'
+    };
+    var selectType = selectMap[e.currentTarget.name];
+
     if (selectType === 'type' || selectType === 'price' || e.currentTarget.value === 'any') {
       currentFilter[selectType] = e.currentTarget.value;
     } else {
@@ -136,12 +138,12 @@
   };
 
   var addFilterEventListeners = function () {
-    document.forms.tokyo__filters.elements['housing_type'].addEventListener('change', changeSelectFilterHandler);
-    document.forms.tokyo__filters.elements['housing_price'].addEventListener('change', changeSelectFilterHandler);
-    document.forms.tokyo__filters.elements['housing_room-number'].addEventListener('change', changeSelectFilterHandler);
-    document.forms.tokyo__filters.elements['housing_guests-number'].addEventListener('change', changeSelectFilterHandler);
+    housingType.addEventListener('change', changeSelectFilterHandler);
+    housingPrice.addEventListener('change', changeSelectFilterHandler);
+    roomsNumber.addEventListener('change', changeSelectFilterHandler);
+    guestsNumber.addEventListener('change', changeSelectFilterHandler);
 
-    [].forEach.call(document.forms.tokyo__filters.elements.feature, function (checkbox) {
+    [].forEach.call(filterFeatures, function (checkbox) {
       checkbox.addEventListener('change', changeCheckboxFilterHandler);
     });
   };

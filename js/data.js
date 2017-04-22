@@ -60,33 +60,26 @@
 
   var featuresComparator = function (features, current) {
     var keys = Object.keys(features);
-    for (var i = 0; i < keys.length; i++) {
-      if (features[keys[i]] && current.indexOf(keys[i]) < 0) {
-        return false;
-      }
-    }
-    return true;
+    return keys.every(function (key) {
+      return !(features[key] && current.indexOf(key) < 0);
+    });
   };
 
   var filterAlg = function (current) {
-    var addItem = true;
     var filter = form().currentFilter;
-    Object.keys(filter).forEach(function (field) {
+    return Object.keys(filter).every(function (field) {
       switch (field) {
         case 'type':
         case 'rooms':
         case 'guests':
-          addItem = addItem && (filter[field] === 'any' || current.offer[field] === filter[field]);
-          break;
+          return filter[field] === 'any' || current.offer[field] === filter[field];
         case 'price':
-          addItem = addItem && priceComparator(filter[field], current.offer[field]);
-          break;
+          return priceComparator(filter[field], current.offer[field]);
         case 'features':
-          addItem = addItem && featuresComparator(filter.features, current.offer.features);
-          break;
+          return featuresComparator(filter.features, current.offer.features);
       }
+      return false;
     });
-    return addItem;
   };
 
   var filterOffers = function () {
