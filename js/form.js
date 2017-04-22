@@ -7,6 +7,7 @@
   var utils = app.factory.getUtils;
 
   var KEYCODE_ENTER = 13;
+  var DEBOUNCE_INTERVAL = 500;
 
   // filter form
   var filterForm = document.querySelector('.tokyo__filters');
@@ -112,12 +113,12 @@
     } else {
       currentFilter[selectType] = +e.currentTarget.value;
     }
-    utils().debounce(filterAndRedraw);
+    utils().debounce(filterAndRedraw, DEBOUNCE_INTERVAL)();
   };
 
   var changeCheckboxFilterHandler = function (e) {
     currentFilter.features[e.currentTarget.value] = e.currentTarget.checked;
-    utils().debounce(filterAndRedraw);
+    utils().debounce(filterAndRedraw, DEBOUNCE_INTERVAL)();
   };
 
   var filterAndRedraw = function () {

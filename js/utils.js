@@ -4,10 +4,6 @@
 
   var data = app.factory.getData;
 
-  var DEBOUNCE_INTERVAL = 500;
-
-  var lastTimeout;
-
   var getRandomArray = function (length) {
     shuffle(data().offers);
     data().offers = data().offers.slice(0, length);
@@ -28,11 +24,16 @@
     return Math.round(Math.random() * (max - min) + min);
   };
 
-  var debounce = function (fun) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(fun, DEBOUNCE_INTERVAL);
+  var debounce = function (func, wait) {
+    var timeout;
+    return function () {
+      var later = function () {
+        timeout = null;
+        func.apply();
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
   };
 
   app.utils = {
