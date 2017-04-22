@@ -27,9 +27,10 @@
   var debounce = function (func, wait) {
     var timeout;
     return function () {
+      var args = arguments;
       var later = function () {
         timeout = null;
-        func.apply();
+        func.apply(null, args);
       };
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);

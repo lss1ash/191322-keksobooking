@@ -106,19 +106,19 @@
       'housing_room-number': 'rooms',
       'housing_guests-number': 'guests'
     };
-    var selectType = selectMap[e.currentTarget.name];
+    var selectType = selectMap[e.target.name];
 
-    if (selectType === 'type' || selectType === 'price' || e.currentTarget.value === 'any') {
-      currentFilter[selectType] = e.currentTarget.value;
+    if (selectType === 'type' || selectType === 'price' || e.target.value === 'any') {
+      currentFilter[selectType] = e.target.value;
     } else {
-      currentFilter[selectType] = +e.currentTarget.value;
+      currentFilter[selectType] = +e.target.value;
     }
-    utils().debounce(filterAndRedraw, DEBOUNCE_INTERVAL)();
+    filterAndRedraw();
   };
 
   var changeCheckboxFilterHandler = function (e) {
-    currentFilter.features[e.currentTarget.value] = e.currentTarget.checked;
-    utils().debounce(filterAndRedraw, DEBOUNCE_INTERVAL)();
+    currentFilter.features[e.target.value] = e.target.checked;
+    filterAndRedraw();
   };
 
   var filterAndRedraw = function () {
@@ -139,13 +139,13 @@
   };
 
   var addFilterEventListeners = function () {
-    housingType.addEventListener('change', changeSelectFilterHandler);
-    housingPrice.addEventListener('change', changeSelectFilterHandler);
-    roomsNumber.addEventListener('change', changeSelectFilterHandler);
-    guestsNumber.addEventListener('change', changeSelectFilterHandler);
+    housingType.addEventListener('change', utils().debounce(changeSelectFilterHandler, DEBOUNCE_INTERVAL));
+    housingPrice.addEventListener('change', utils().debounce(changeSelectFilterHandler, DEBOUNCE_INTERVAL));
+    roomsNumber.addEventListener('change', utils().debounce(changeSelectFilterHandler, DEBOUNCE_INTERVAL));
+    guestsNumber.addEventListener('change', utils().debounce(changeSelectFilterHandler, DEBOUNCE_INTERVAL));
 
     [].forEach.call(filterFeatures, function (checkbox) {
-      checkbox.addEventListener('change', changeCheckboxFilterHandler);
+      checkbox.addEventListener('change', utils().debounce(changeCheckboxFilterHandler, DEBOUNCE_INTERVAL));
     });
   };
 
