@@ -15,6 +15,9 @@
     getPin: function () {
       return app.pin;
     },
+    getUtils: function () {
+      return app.utils;
+    }
   };
 
 }(window.app));

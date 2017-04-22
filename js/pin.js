@@ -108,15 +108,24 @@
   };
 
   var appendPinsToMap = function () {
+    if (pinMap.children.length > 1) {
+      card().close();
+      removePinsFromMap();
+    }
     var pinsFragment = document.createDocumentFragment();
     data().offers.forEach(function (offer, index) {
       var currentPin = createPin(offer, index);
       if (index === 0) {
-        activatePin(currentPin);
+        activatePin(currentPin, offer);
       }
       pinsFragment.appendChild(currentPin);
     });
     pinMap.appendChild(pinsFragment);
+  };
+  var removePinsFromMap = function () {
+    while (pinMap.children.length > 1) {
+      pinMap.removeChild(pinMap.lastElementChild);
+    }
   };
 
   var initPin = function () {
