@@ -22,7 +22,7 @@
   };
   var fillCard = function (item) {
     var lodgeClone = lodgeTemplate.content.cloneNode(true);
-    var cloneRoot = lodgeClone.firstElementChild; // dialog__panel
+    var cloneRoot = lodgeClone.querySelector('.dialog__panel');
     cloneRoot.querySelector('.lodge__title').textContent = item.offer.title;
     cloneRoot.querySelector('.lodge__address').textContent = item.offer.address;
     cloneRoot.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
