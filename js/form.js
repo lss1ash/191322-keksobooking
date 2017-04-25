@@ -122,7 +122,7 @@
   };
 
   var filterAndRedraw = function () {
-    data().filterOffers();
+    data().filterOffers(currentFilter);
     pin().append();
   };
 
