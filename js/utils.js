@@ -2,11 +2,10 @@
 
 (function (app) {
 
-  var data = app.factory.getData;
-
-  var getRandomArray = function (length) {
-    shuffle(data().offers);
-    data().offers = data().offers.slice(0, length);
+  var sliceRandomArray = function (array, length) {
+    shuffle(array);
+    array = array.slice(0, length);
+    return array;
   };
 
   var reorderItem = function (item, index, array) {
@@ -38,7 +37,7 @@
   };
 
   app.utils = {
-    getRandomArray: getRandomArray,
+    sliceRandomArray: sliceRandomArray,
     debounce: debounce
   };
 

@@ -20,7 +20,7 @@
     app.data.loadedOffers = response.slice();
 
     form().addFilterEventListeners();
-    utils().getRandomArray(INITIAL_PINS_COUNT);
+    app.data.offers = utils().sliceRandomArray(app.data.offers, INITIAL_PINS_COUNT);
     pin().append();
   };
   var loadError = function (msgHeader, msgParagraph) {
