@@ -38,13 +38,9 @@
       errorCallback('Произошла ошибка соединения с сервером', 'Время ожидания ответа на запрос истекло...');
     };
 
-    var addEventListeners = function () {
-      xhr.onload = loadHandler;
-      xhr.onerror = errorHandler;
-      xhr.ontimeout = timeoutHandler;
-    };
-
-    addEventListeners();
+    xhr.onload = loadHandler;
+    xhr.onerror = errorHandler;
+    xhr.ontimeout = timeoutHandler;
 
     xhr.open('GET', url);
     xhr.send();

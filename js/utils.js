@@ -2,11 +2,9 @@
 
 (function (app) {
 
-  var data = app.factory.getData;
-
-  var getRandomArray = function (length) {
-    shuffle(data().offers);
-    data().offers = data().offers.slice(0, length);
+  var sliceRandomArray = function (array, length) {
+    shuffle(array);
+    return array.slice(0, length);
   };
 
   var reorderItem = function (item, index, array) {
@@ -37,9 +35,15 @@
     };
   };
 
+  var synchronizeFields = function (fieldOne, fieldTwo, dataOne, dataTwo, cb) {
+    var value = dataTwo[dataOne.indexOf(fieldOne.value)];
+    cb(fieldTwo, value);
+  };
+
   app.utils = {
-    getRandomArray: getRandomArray,
-    debounce: debounce
+    sliceRandomArray: sliceRandomArray,
+    debounce: debounce,
+    synchronizeFields: synchronizeFields
   };
 
 }(window.app));

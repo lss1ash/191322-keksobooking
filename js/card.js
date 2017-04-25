@@ -2,8 +2,6 @@
 
 (function (app) {
 
-  var pin = app.factory.getPin;
-
   var OFFER_TYPE_DESCRIPTIONS = {
     flat: 'Квартира',
     house: 'Дом',
@@ -22,7 +20,7 @@
   };
   var fillCard = function (item) {
     var lodgeClone = lodgeTemplate.content.cloneNode(true);
-    var cloneRoot = lodgeClone.firstElementChild; // dialog__panel
+    var cloneRoot = lodgeClone.querySelector('.dialog__panel');
     cloneRoot.querySelector('.lodge__title').textContent = item.offer.title;
     cloneRoot.querySelector('.lodge__address').textContent = item.offer.address;
     cloneRoot.querySelector('.lodge__price').innerHTML = item.offer.price + '&#x20bd;/ночь';
@@ -53,8 +51,12 @@
       lodgeClonePhotos.appendChild(imgNode);
     });
   };
+  var showCard = function () {
+    offerDialog.style.display = 'block';
+    addEventListeners();
+  };
   var closeCard = function () {
-    pin().deactivate();
+    app.pin.deactivate();
     offerDialog.style.display = 'none';
     removeEventListeners();
   };
@@ -82,6 +84,7 @@
   app.card = {
     open: openCard,
     fill: fillCard,
+    show: showCard,
     close: closeCard,
     addEventListeners: addEventListeners
   };
