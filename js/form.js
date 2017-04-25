@@ -107,12 +107,9 @@
       'housing_guests-number': 'guests'
     };
     var selectType = selectMap[e.target.name];
+    var isTextValue = selectType === 'type' || selectType === 'price' || e.target.value === 'any';
 
-    if (selectType === 'type' || selectType === 'price' || e.target.value === 'any') {
-      currentFilter[selectType] = e.target.value;
-    } else {
-      currentFilter[selectType] = +e.target.value;
-    }
+    currentFilter[selectType] = isTextValue ? e.target.value : +e.target.value;
     filterAndRedraw();
   };
 
