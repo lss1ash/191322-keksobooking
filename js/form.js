@@ -8,6 +8,8 @@
 
   var KEYCODE_ENTER = 13;
   var DEBOUNCE_INTERVAL = 500;
+  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
+  var INITIAL_PINS_COUNT = 3;
 
   // filter form
   var filterForm = document.querySelector('.tokyo__filters');
@@ -27,6 +29,8 @@
   var selectRoomNum = noticeForm.querySelector('#room_number');
   var selectCapacity = noticeForm.querySelector('#capacity');
   var inputAddress = noticeForm.querySelector('#address');
+
+  var messageBoxTemplate = document.getElementById('message-box');
 
   var currentFilter = {
     type: 'any',
@@ -149,6 +153,26 @@
     });
   };
 
+  var loadSuccess = function (response) {
+    app.data.offers = response;
+    app.data.loadedOffers = response.slice();
+
+    addFilterEventListeners();
+    app.data.offers = utils().sliceRandomArray(app.data.offers, INITIAL_PINS_COUNT);
+    pin().append();
+  };
+  var loadError = function (msgHeader, msgParagraph) {
+    var message = messageBoxTemplate.content.cloneNode(true);
+    var cloneRoot = message.firstElementChild;
+
+    var html = cloneRoot.innerHTML;
+    html = html.replace('{header}', msgHeader);
+    html = html.replace('{message}', msgParagraph);
+    cloneRoot.innerHTML = html;
+
+    document.body.appendChild(message);
+  };
+
   app.form = {
     setAddress: function (coords) {
       inputAddress.value = 'x: ' + coords.x + ', y: ' + coords.y;
@@ -158,5 +182,6 @@
   };
 
   addEventListeners();
+  app.load(DATA_URL, loadSuccess, loadError);
 
 }(window.app));

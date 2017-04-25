@@ -2,37 +2,9 @@
 
 (function (app) {
 
-  var pin = app.factory.getPin;
-  var utils = app.factory.getUtils;
-  var form = app.factory.getForm;
-
-  var DATA_URL = 'https://intensive-javascript-server-kjgvxfepjl.now.sh/keksobooking/data';
-  var INITIAL_PINS_COUNT = 3;
   var PRICE = {
     LOW: 10000,
     HIGH: 50000
-  };
-
-  var messageBoxTemplate = document.getElementById('message-box');
-
-  var loadSuccess = function (response) {
-    app.data.offers = response;
-    app.data.loadedOffers = response.slice();
-
-    form().addFilterEventListeners();
-    app.data.offers = utils().sliceRandomArray(app.data.offers, INITIAL_PINS_COUNT);
-    pin().append();
-  };
-  var loadError = function (msgHeader, msgParagraph) {
-    var message = messageBoxTemplate.content.cloneNode(true);
-    var cloneRoot = message.firstElementChild;
-
-    var html = cloneRoot.innerHTML;
-    html = html.replace('{header}', msgHeader);
-    html = html.replace('{message}', msgParagraph);
-    cloneRoot.innerHTML = html;
-
-    document.body.appendChild(message);
   };
 
   var priceComparator = function (priceLevel, price) {
@@ -83,7 +55,7 @@
     });
   };
 
-  app.load(DATA_URL, loadSuccess, loadError);
+
   app.data = {
     filterOffers: filterOffers,
     offers: null,
