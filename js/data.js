@@ -10,20 +10,11 @@
   var priceComparator = function (priceLevel, price) {
     switch (priceLevel) {
       case 'low':
-        if (price < PRICE.LOW) {
-          return true;
-        }
-        break;
+        return price < PRICE.LOW;
       case 'middle':
-        if (price >= PRICE.LOW && price <= PRICE.HIGH) {
-          return true;
-        }
-        break;
+        return price >= PRICE.LOW && price <= PRICE.HIGH;
       case 'high':
-        if (price > PRICE.HIGH) {
-          return true;
-        }
-        break;
+        return price > PRICE.HIGH;
       case 'any':
         return true;
     }
