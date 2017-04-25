@@ -2,8 +2,6 @@
 
 (function (app) {
 
-  var pin = app.factory.getPin;
-
   var OFFER_TYPE_DESCRIPTIONS = {
     flat: 'Квартира',
     house: 'Дом',
@@ -58,7 +56,7 @@
     addEventListeners();
   };
   var closeCard = function () {
-    pin().deactivate();
+    app.pin.deactivate();
     offerDialog.style.display = 'none';
     removeEventListeners();
   };

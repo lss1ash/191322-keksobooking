@@ -55,7 +55,6 @@
     });
   };
 
-
   app.data = {
     filterOffers: filterOffers,
     offers: null,

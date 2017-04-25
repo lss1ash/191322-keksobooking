@@ -2,10 +2,6 @@
 
 (function (app) {
 
-  var data = app.factory.getData;
-  var form = app.factory.getForm;
-  var card = app.factory.getCard;
-
   var PIN_WIDTH = 56;
   var PIN_HEIGHT = 75;
   var PIN_MAIN_WIDTH = 76;
@@ -24,9 +20,9 @@
     if (pinItem.dataset.index && activePin !== pinItem) {
       deactivatePin();
       pinItem.classList.add('pin--active');
-      card().fill(data().offers[pinItem.dataset.index]);
+      app.card.fill(app.data.offers[pinItem.dataset.index]);
       activePin = pinItem;
-      card().show();
+      app.card.show();
     }
   };
   var deactivatePin = function () {
@@ -104,16 +100,16 @@
       y: mainPin.offsetTop + PIN_MAIN_HEIGHT
     };
 
-    form().setAddress(resultCoords);
+    app.form.setAddress(resultCoords);
   };
 
   var appendPinsToMap = function () {
     if (pinMap.children.length > 1) {
-      card().close();
+      app.card.close();
       removePinsFromMap();
     }
     var pinsFragment = document.createDocumentFragment();
-    data().offers.forEach(function (offer, index) {
+    app.data.offers.forEach(function (offer, index) {
       var currentPin = createPin(offer, index);
       if (index === 0) {
         activatePin(currentPin, offer);
@@ -129,7 +125,7 @@
   };
 
   var initPin = function () {
-    form().setAddress({
+    app.form.setAddress({
       x: mainPin.offsetLeft + PIN_MAIN_WIDTH / 2,
       y: mainPin.offsetTop + PIN_MAIN_HEIGHT
     });
@@ -152,9 +148,8 @@
           mainPin.style.top = y + 'px';
         }
       }
-    }
+    },
+    init: initPin
   };
-
-  initPin();
 
 }(window.app));
