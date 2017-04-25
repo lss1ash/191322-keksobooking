@@ -53,6 +53,10 @@
       lodgeClonePhotos.appendChild(imgNode);
     });
   };
+  var showCard = function () {
+    offerDialog.style.display = 'block';
+    addEventListeners();
+  };
   var closeCard = function () {
     pin().deactivate();
     offerDialog.style.display = 'none';
@@ -82,6 +86,7 @@
   app.card = {
     open: openCard,
     fill: fillCard,
+    show: showCard,
     close: closeCard,
     addEventListeners: addEventListeners
   };

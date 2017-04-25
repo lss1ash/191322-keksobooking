@@ -35,9 +35,15 @@
     };
   };
 
+  var synchronizeFields = function (fieldOne, fieldTwo, dataOne, dataTwo, cb) {
+    var value = dataTwo[dataOne.indexOf(fieldOne.value)];
+    cb(fieldTwo, value);
+  };
+
   app.utils = {
     sliceRandomArray: sliceRandomArray,
-    debounce: debounce
+    debounce: debounce,
+    synchronizeFields: synchronizeFields
   };
 
 }(window.app));
