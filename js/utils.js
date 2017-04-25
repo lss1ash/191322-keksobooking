@@ -4,8 +4,7 @@
 
   var sliceRandomArray = function (array, length) {
     shuffle(array);
-    array = array.slice(0, length);
-    return array;
+    return array.slice(0, length);
   };
 
   var reorderItem = function (item, index, array) {
